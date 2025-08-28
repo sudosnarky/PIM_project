@@ -8,6 +8,7 @@ from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 from typing import List, Optional
 import sqlite3
@@ -15,7 +16,9 @@ import hashlib
 import secrets
 
 
+
 app = FastAPI()
+
 
 # Allow CORS for frontend
 app.add_middleware(
@@ -25,6 +28,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Redirect root to login page
+@app.get("/", include_in_schema=False)
+async def root():
+    return RedirectResponse(url="/static/html/index.html")
 
 # Serve static frontend files at /static
 app.mount("/static", StaticFiles(directory="static", html=True), name="static")
