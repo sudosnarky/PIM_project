@@ -1,8 +1,3 @@
-from fastapi.responses import RedirectResponse
-# Redirect root to login page
-@app.get("/", include_in_schema=False)
-async def root():
-    return RedirectResponse(url="/static/html/index.html")
 
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
@@ -18,6 +13,12 @@ import secrets
 
 
 app = FastAPI()
+
+# Redirect root to login page
+from fastapi.responses import RedirectResponse
+@app.get("/", include_in_schema=False)
+async def root():
+    return RedirectResponse(url="/static/html/index.html")
 
 
 # Allow CORS for frontend
