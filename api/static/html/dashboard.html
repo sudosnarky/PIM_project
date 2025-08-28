@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PARA InfoSystem | Dashboard</title>
+<link rel="icon" type="image/svg+xml" href="/static/assets/favicon.svg">
+<link rel="stylesheet" href="/static/css/styles.css">
+<script src="/static/js/app.js" defer></script>
+</head>
+<body>
+<div class="dashboard-container fade-in">
+
+	<div style="display:flex;justify-content:space-between;align-items:center;">
+		<h1>PARA InfoSystem Dashboard</h1>
+		<div style="display:flex;align-items:center;margin-left:auto;gap:0.75em;">
+			<button class="btn" id="logout-btn">Logout</button>
+			<a href="/static/html/help.html" class="btn btn-secondary" style="padding:0.5em 1.2em;">Help & FAQs</a>
+		</div>
+	</div>
+
+<div class="para-nav">
+<div class="para-tab active">Projects</div>
+<div class="para-tab">Areas</div>
+<div class="para-tab">Resources</div><div class="para-tab">Archives</div>
+</div>
+</div>
+<footer style="text-align:center;margin-top:2em;color:#888;font-size:0.95em;">
+	&copy; <a href="https://github.com/sudosnarky" target="_blank" style="color:#888;">@sudosnarky</a>
+</footer>
+
+<div class="search-bar">
+<input type="text" placeholder="Search particles..." class="input-field search-input">
+<button class="btn btn-primary">Search</button><button class="btn btn-secondary">Create Particle</button>
+</div>
+
+<div class="items-list">
+<div class="item-card">
+<div class="item-info"><h3 class="item-title"></h3><p class="item-snippet"></p></div>
+<div class="item-actions"><a href="view.html" class="btn btn-view">View</a>
+<a href="edit.html" class="btn btn-edit">Edit</a></div>
+</div>
+
+<div class="item-card">
+<div class="item-info"><h3 class="item-title"></h3>
+<p class="item-snippet"></p></div>
+<div class="item-actions"><a href="view.html" class="btn btn-view">View</a><a href="edit.html" class="btn btn-edit">Edit</a></div>
+</div>
+
+<div class="item-card">
+<div class="item-info"><h3 class="item-title"></h3><p class="item-snippet"></p>
+</div><div class="item-actions"><a href="view.html" class="btn btn-view">View</a>
+<a href="edit.html" class="btn btn-edit">Edit</a></div>
+</div>
+</div>
+</div>
+</body>
+</html>
