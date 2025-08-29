@@ -12,12 +12,20 @@ import secrets
 
 
 
+
 app = FastAPI()
+"""
+Main FastAPI app instance.
+"""
 
 # Redirect root to login page
+
 from fastapi.responses import RedirectResponse
 @app.get("/", include_in_schema=False)
 async def root():
+    """
+    Redirects the root URL to the login page.
+    """
     return RedirectResponse(url="/static/html/index.html")
 
 
@@ -38,20 +46,42 @@ async def root():
 # Serve static frontend files at /static
 app.mount("/static", StaticFiles(directory="static", html=True), name="static")
 
+
 def get_db():
+    """
+    Opens a connection to the SQLite database.
+    Returns:
+        sqlite3.Connection: Database connection.
+    """
     conn = sqlite3.connect("pim.db")
     conn.row_factory = sqlite3.Row
     return conn
 
+
 def hash_password(password: str) -> str:
+    """
+    Hashes a password using SHA-256.
+    Args:
+        password (str): The user's password.
+    Returns:
+        str: The hashed password.
+    """
     return hashlib.sha256(password.encode()).hexdigest()
 
 # --- Models ---
+
 class User(BaseModel):
+    """
+    User model for registration and login.
+    """
     username: str
     password: str
 
+
 class Particle(BaseModel):
+    """
+    Particle model. Represents a note, task, or resource.
+    """
     id: Optional[int] = None
     title: str
     content: str

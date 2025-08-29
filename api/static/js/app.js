@@ -1,26 +1,64 @@
 // PARA InfoSystem App Frontend JS (API-integrated)
 // Handles login, dashboard, note CRUD, PARA filtering, search, markdown rendering, tags, and backend persistence
 
-// Dynamically set API base URL to backend root, not /static
+/**
+ * Get the API base URL for backend requests.
+ * @type {string}
+ */
 const API = window.location.origin.replace(/\/static.*/, '');
+
+/**
+ * Get the authentication token from localStorage.
+ * @returns {string|null}
+ */
 function getToken() {
   return localStorage.getItem('pim_token');
 }
+
+/**
+ * Set the authentication token in localStorage.
+ * @param {string} token
+ */
 function setToken(token) {
   localStorage.setItem('pim_token', token);
 }
+
+/**
+ * Remove the authentication token from localStorage.
+ */
 function clearToken() {
   localStorage.removeItem('pim_token');
 }
+
+/**
+ * Get the username from localStorage.
+ * @returns {string|null}
+ */
 function getUser() {
   return localStorage.getItem('pim_user');
 }
+
+/**
+ * Set the username in localStorage.
+ * @param {string} username
+ */
 function setUser(username) {
   localStorage.setItem('pim_user', username);
 }
+
+/**
+ * Remove the username from localStorage.
+ */
 function clearUser() {
   localStorage.removeItem('pim_user');
 }
+
+/**
+ * Make an authenticated API request to the backend.
+ * @param {string} path - API endpoint path
+ * @param {object} opts - Fetch options
+ * @returns {Promise<any>} - Parsed JSON response
+ */
 async function apiFetch(path, opts = {}) {
   opts.headers = opts.headers || {};
   if (getToken()) opts.headers['Authorization'] = 'Bearer ' + getToken();
@@ -45,8 +83,14 @@ async function apiFetch(path, opts = {}) {
   }
   return res.json();
 }
+
+/**
+ * Convert Markdown to HTML for note rendering.
+ * Supports headings, bold, italics, code, links, lists, blockquotes, and hashtags.
+ * @param {string} md - Markdown string
+ * @returns {string} - HTML string
+ */
 function markdownToHtml(md) {
-  // Minimal Markdown to HTML (bold, italics, code, links, headings, lists, blockquotes)
   let html = md
     .replace(/^###### (.*$)/gim, '<h6>$1</h6>')
     .replace(/^##### (.*$)/gim, '<h5>$1</h5>')
@@ -134,7 +178,7 @@ if (location.pathname.endsWith('dashboard.html')) {
   const paraTabs = document.querySelectorAll('.para-tab');
   const searchInput = document.querySelector('.search-input');
   const itemsList = document.querySelector('.items-list');
-  const createBtn = document.querySelector('.btn-secondary');
+  const createBtn = document.getElementById('create-particle-btn');
   const logoutBtn = document.getElementById('logout-btn');
   let currentSection = 'Projects';
   let particles = [];
