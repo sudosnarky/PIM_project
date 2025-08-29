@@ -10,49 +10,44 @@ const API = window.location.hostname.includes('render.com')
   : window.location.origin.replace(/\/static.*/, '');
 
 /**
- * Get the authentication token from localStorage.
+ * Get the CSRF token from cookies.
  * @returns {string|null}
  */
-function getToken() {
-  return localStorage.getItem('pim_token');
+function getCsrfToken() {
+  return getCookie('csrf_token');
 }
 
 /**
- * Set the authentication token in localStorage.
- * @param {string} token
+ * Helper function to get a cookie by name.
+ * @param {string} name - Name of the cookie
+ * @returns {string|null} - Cookie value or null
  */
-function setToken(token) {
-  localStorage.setItem('pim_token', token);
+function getCookie(name) {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? match[2] : null;
 }
 
 /**
- * Remove the authentication token from localStorage.
- */
-function clearToken() {
-  localStorage.removeItem('pim_token');
-}
-
-/**
- * Get the username from localStorage.
+ * Get the username from sessionStorage (more secure than localStorage).
  * @returns {string|null}
  */
 function getUser() {
-  return localStorage.getItem('pim_user');
+  return sessionStorage.getItem('pim_user');
 }
 
 /**
- * Set the username in localStorage.
+ * Set the username in sessionStorage.
  * @param {string} username
  */
 function setUser(username) {
-  localStorage.setItem('pim_user', username);
+  sessionStorage.setItem('pim_user', username);
 }
 
 /**
- * Remove the username from localStorage.
+ * Remove the username from sessionStorage.
  */
 function clearUser() {
-  localStorage.removeItem('pim_user');
+  sessionStorage.removeItem('pim_user');
 }
 
 /**
@@ -62,11 +57,26 @@ function clearUser() {
  * @returns {Promise<any>} - Parsed JSON response
  */
 async function apiFetch(path, opts = {}) {
+  // Initialize headers
   opts.headers = opts.headers || {};
-  if (getToken()) opts.headers['Authorization'] = 'Bearer ' + getToken();
+  
+  // Include credentials to send/receive cookies
+  opts.credentials = 'include';
+  
+  // Add CSRF token for non-GET requests
+  if (path !== '/token' && ['POST', 'PUT', 'DELETE', 'PATCH'].includes(opts.method)) {
+    const csrfToken = getCsrfToken();
+    if (csrfToken) {
+      opts.headers['X-CSRF-Token'] = csrfToken;
+    }
+  }
+  
+  // Set content type if not already set and not FormData
   if (!opts.headers['Content-Type'] && !(opts.body instanceof FormData)) {
     opts.headers['Content-Type'] = 'application/json';
   }
+  
+  // Stringify JSON body
   if (opts.body && typeof opts.body !== 'string' && !(opts.body instanceof FormData)) {
     opts.body = JSON.stringify(opts.body);
   }
@@ -77,12 +87,22 @@ async function apiFetch(path, opts = {}) {
     const res = await fetch(API + path, opts);
     console.log(`Response status: ${res.status}`);
     
+    // Handle authentication errors
     if (res.status === 401) {
-      clearToken();
       clearUser();
       alert('Session expired. Please log in again.');
       window.location.href = 'index.html';
       throw new Error('Unauthorized');
+    }
+    
+    // Handle CSRF errors
+    if (res.status === 403) {
+      const errorData = await res.json();
+      if (errorData.detail && errorData.detail.includes('CSRF')) {
+        alert('Security error: Invalid request token. Please refresh the page and try again.');
+        window.location.reload();
+        throw new Error('CSRF Error');
+      }
     }
     
     if (!res.ok) {
@@ -150,24 +170,47 @@ if (location.pathname.endsWith('index.html')) {
       e.preventDefault();
       const username = document.getElementById('login-username').value.trim();
       const password = document.getElementById('login-password').value.trim();
-      if (!username || !password) return alert('Username and password required.');
+      
+      // Client-side validation
+      if (!username || !password) {
+        return alert('Username and password required.');
+      }
+      
+      if (password.length < 8) {
+        return alert('Password must be at least 8 characters long.');
+      }
+      
       try {
         const form = new FormData();
         form.append('username', username);
         form.append('password', password);
-        const res = await fetch(API + '/token', { method: 'POST', body: form });
-        if (!res.ok) throw new Error('Login failed');
+        
+        // Send login request with credentials to allow cookie setting
+        const res = await fetch(API + '/token', { 
+          method: 'POST', 
+          body: form,
+          credentials: 'include' 
+        });
+        
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({}));
+          throw new Error(errorData.detail || 'Login failed');
+        }
+        
         const data = await res.json();
-        setToken(data.access_token);
+        
+        // Store username in session storage (not the token, as it's in HttpOnly cookie now)
         setUser(username);
+        
         // On first login, show onboarding
-        if (!localStorage.getItem('onboarded')) {
-          localStorage.setItem('onboarded', '1');
+        if (!sessionStorage.getItem('onboarded')) {
+          sessionStorage.setItem('onboarded', '1');
           window.location.href = 'onboarding.html';
         } else {
           window.location.href = 'dashboard.html';
         }
       } catch (err) {
+        console.error('Login error:', err);
         alert('Login failed: ' + err.message);
       }
     };
@@ -177,16 +220,63 @@ if (location.pathname.endsWith('index.html')) {
       e.preventDefault();
       const username = document.getElementById('register-username').value.trim();
       const password = document.getElementById('register-password').value.trim();
-      if (!username || !password) return alert('Username and password required.');
+      
+      // Enhanced client-side validation
+      if (!username || !password) {
+        return alert('Username and password required.');
+      }
+      
+      // Username validation
+      if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+        return alert('Username must contain only letters, numbers, and underscores.');
+      }
+      
+      if (username.length < 3) {
+        return alert('Username must be at least 3 characters long.');
+      }
+      
+      // Password strength validation
+      if (password.length < 8) {
+        return alert('Password must be at least 8 characters long.');
+      }
+      
+      if (!/[A-Z]/.test(password)) {
+        return alert('Password must contain at least one uppercase letter.');
+      }
+      
+      if (!/[a-z]/.test(password)) {
+        return alert('Password must contain at least one lowercase letter.');
+      }
+      
+      if (!/[0-9]/.test(password)) {
+        return alert('Password must contain at least one number.');
+      }
+      
       try {
         await apiFetch('/register', {
           method: 'POST',
           body: { username, password }
         });
-        // After first registration, show onboarding
-        localStorage.setItem('onboarded', '1');
-        window.location.href = 'onboarding.html';
+        
+        // After registration, redirect to login
+        alert('Registration successful. Please log in.');
+        
+        // After first registration, mark as onboarded
+        sessionStorage.setItem('onboarded', '1');
+        
+        // Show login form
+        const loginBox = document.getElementById('login-box');
+        const registerBox = document.getElementById('register-box');
+        if (loginBox && registerBox) {
+          registerBox.style.display = 'none';
+          loginBox.style.display = '';
+          
+          // Pre-fill username
+          document.getElementById('login-username').value = username;
+          document.getElementById('login-password').focus();
+        }
       } catch (err) {
+        console.error('Registration error:', err);
         alert('Registration failed: ' + err.message);
       }
     };
