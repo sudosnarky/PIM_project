@@ -6,7 +6,7 @@
  * @type {string}
  */
 const API = window.location.hostname.includes('render.com') 
-  ? 'https://pim-project.onrender.com'  // Deployment URL - update this with your actual domain
+  ? 'https://pim-project-qgyu.onrender.com'  // Deployment URL - update this with your actual domain
   : window.location.origin.replace(/\/static.*/, '');
 
 /**
@@ -296,14 +296,29 @@ if (location.pathname.endsWith('dashboard.html')) {
     });
   });
   searchInput.addEventListener('input', renderList);
-  createBtn.addEventListener('click', function() {
-    location.href = 'edit.html';
-  });
+  
+  // Enhanced Create Particle button handler with error checking
+  if (createBtn) {
+    createBtn.addEventListener('click', function() {
+      try {
+        console.log("Create particle button clicked, navigating to edit.html");
+        // Make sure we don't pass an ID to avoid confusion
+        window.location.href = 'edit.html';
+      } catch (err) {
+        console.error("Error navigating to edit page:", err);
+        alert("Couldn't open edit page. Please try again.");
+      }
+    });
+  } else {
+    console.error("Create particle button not found in dashboard");
+  }
+  
   renderList();
 }
 
 // --- Edit Page ---
 if (location.pathname.endsWith('edit.html')) {
+  console.log("Edit page detected, initializing...");
   const urlParams = new URLSearchParams(location.search);
   const id = urlParams.get('id');
   const titleInput = document.querySelector('.article-header input');
@@ -311,42 +326,103 @@ if (location.pathname.endsWith('edit.html')) {
   const tagsInput = document.querySelector('input[placeholder*="tags"]');
   const saveBtn = document.querySelector('.btn-primary');
   let editing = null;
+  
+  // Log edit mode for debugging
+  console.log(`Edit mode: ${id ? 'Editing existing particle #' + id : 'Creating new particle'}`);
+  
+  // Check if all required elements are present
+  if (!titleInput || !mdEditor || !tagsInput || !saveBtn) {
+    console.error("Required edit page elements missing:", {
+      titleInput: !!titleInput,
+      mdEditor: !!mdEditor,
+      tagsInput: !!tagsInput,
+      saveBtn: !!saveBtn
+    });
+  }
+  
   async function loadParticle() {
-    if (id) {
-      try {
-        editing = await apiFetch(`/particles/${id}`);
-        titleInput.value = editing.title;
-        mdEditor.value = editing.content;
-        tagsInput.value = (editing.tags || []).join(', ');
-      } catch (err) {
-        alert('Failed to load note: ' + err.message);
-      }
+    // For new particles (no id), leave fields empty
+    if (!id) {
+      console.log("New particle mode - fields left empty");
+      return;
+    }
+    
+    try {
+      console.log(`Loading particle #${id} for editing`);
+      editing = await apiFetch(`/particles/${id}`);
+      titleInput.value = editing.title;
+      mdEditor.value = editing.content;
+      tagsInput.value = (editing.tags || []).join(', ');
+      console.log("Successfully loaded particle data");
+    } catch (err) {
+      console.error("Failed to load particle:", err);
+      alert('Failed to load note: ' + err.message);
     }
   }
   saveBtn.addEventListener('click', async function(e) {
     e.preventDefault();
+    console.log("Save button clicked");
+    
     const title = titleInput.value.trim();
     const content = mdEditor.value.trim();
+    
+    // Validate required fields
+    if (!title) {
+      alert('Title is required.');
+      titleInput.focus();
+      return;
+    }
+    
+    if (!content) {
+      alert('Content is required.');
+      mdEditor.focus();
+      return;
+    }
+    
     // Robust tag handling: split by comma, trim, filter empty, always send array
-    let tags = tagsInput.value
-      .split(',')
-      .map(t => t.trim())
-      .filter((t, i, arr) => t && arr.indexOf(t) === i); // remove empty and duplicates
-    if (!Array.isArray(tags)) tags = [];
-    if (!title || !content) return alert('Title and content required.');
+    let tags = [];
     try {
+      tags = tagsInput.value
+        .split(',')
+        .map(t => t.trim())
+        .filter((t, i, arr) => t && arr.indexOf(t) === i); // remove empty and duplicates
+    } catch (e) {
+      console.error("Error processing tags:", e);
+      tags = [];
+    }
+    
+    // Safety check
+    if (!Array.isArray(tags)) tags = [];
+    
+    try {
+      console.log(`Saving particle: ${editing ? 'UPDATE' : 'CREATE'}`);
       let particle;
+      
       if (editing) {
+        console.log(`Updating particle #${id}`);
         particle = await apiFetch(`/particles/${id}`, {
           method: 'PUT',
-          body: { title, content, tags, section: editing.section || 'Projects' }
+          body: { 
+            title, 
+            content, 
+            tags, 
+            section: editing.section || 'Projects' 
+          }
         });
       } else {
+        console.log("Creating new particle");
         particle = await apiFetch('/particles', {
           method: 'POST',
-          body: { title, content, tags, section: 'Projects' }
+          body: { 
+            title, 
+            content, 
+            tags, 
+            section: 'Projects' 
+          }
         });
       }
+      
+      console.log(`Particle saved successfully with ID: ${particle.id}`);
       window.location.href = `view.html?id=${particle.id}`;
     } catch (err) {
       alert('Save failed: ' + err.message);
