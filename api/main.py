@@ -20,14 +20,6 @@ Main FastAPI app instance.
 
 # Redirect root to login page
 
-from fastapi.responses import RedirectResponse
-@app.get("/", include_in_schema=False)
-async def root():
-    """
-    Redirects the root URL to the login page.
-    """
-    return RedirectResponse(url="/static/html/index.html")
-
 
 # Allow CORS for frontend
 app.add_middleware(
@@ -41,6 +33,9 @@ app.add_middleware(
 # Redirect root to login page
 @app.get("/", include_in_schema=False)
 async def root():
+    """
+    Redirects the root URL to the login page.
+    """
     return RedirectResponse(url="/static/html/index.html")
 
 # Serve static frontend files at /static
