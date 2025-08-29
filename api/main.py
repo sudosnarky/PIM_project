@@ -21,10 +21,11 @@ Main FastAPI app instance.
 # Allow CORS for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*", "https://pim-project.onrender.com", "http://localhost:8000"],  # Add your render.com domain
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["*", "Authorization", "Content-Type"],
+    expose_headers=["*"]
 )
 
 # Redirect root to login page
@@ -150,14 +151,35 @@ def get_particle(pid: int, user: str = Depends(get_current_user)):
 
 @app.post("/particles", response_model=Particle)
 def create_particle(p: Particle, user: str = Depends(get_current_user)):
-    db = get_db()
-    cur = db.execute(
-        "INSERT INTO particles (title, content, tags, section, user, created) VALUES (?, ?, ?, ?, ?, datetime('now'))",
-        (p.title, p.content, ",".join(p.tags), p.section, user)
-    )
-    db.commit()
-    pid = cur.lastrowid
-    return get_particle(pid, user)
+    """
+    Create a new particle/note.
+    
+    Args:
+        p (Particle): The particle data
+        user (str): Current authenticated username
+        
+    Returns:
+        Particle: The newly created particle with ID
+    
+    Raises:
+        HTTPException: If there's a database error
+    """
+    try:
+        db = get_db()
+        # Handle missing tags/section gracefully
+        tags = p.tags if p.tags is not None else []
+        section = p.section if p.section else "Projects"
+        
+        cur = db.execute(
+            "INSERT INTO particles (title, content, tags, section, user, created) VALUES (?, ?, ?, ?, ?, datetime('now'))",
+            (p.title, p.content, ",".join(tags), section, user)
+        )
+        db.commit()
+        pid = cur.lastrowid
+        return get_particle(pid, user)
+    except Exception as e:
+        db.rollback() if 'db' in locals() else None
+        raise HTTPException(status_code=500, detail=f"Failed to create particle: {str(e)}")
 
 @app.put("/particles/{pid}", response_model=Particle)
 def update_particle(pid: int, p: Particle, user: str = Depends(get_current_user)):

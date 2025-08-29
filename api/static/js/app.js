@@ -5,7 +5,9 @@
  * Get the API base URL for backend requests.
  * @type {string}
  */
-const API = window.location.origin.replace(/\/static.*/, '');
+const API = window.location.hostname.includes('render.com') 
+  ? 'https://pim-project.onrender.com'  // Deployment URL - update this with your actual domain
+  : window.location.origin.replace(/\/static.*/, '');
 
 /**
  * Get the authentication token from localStorage.
@@ -68,20 +70,38 @@ async function apiFetch(path, opts = {}) {
   if (opts.body && typeof opts.body !== 'string' && !(opts.body instanceof FormData)) {
     opts.body = JSON.stringify(opts.body);
   }
-  const res = await fetch(API + path, opts);
-  if (res.status === 401) {
-    clearToken();
-    clearUser();
-    alert('Session expired. Please log in again.');
-    window.location.href = 'index.html';
-    throw new Error('Unauthorized');
+  
+  // Add better error handling and debugging for deployment
+  console.log(`Sending request to: ${API + path}`);
+  try {
+    const res = await fetch(API + path, opts);
+    console.log(`Response status: ${res.status}`);
+    
+    if (res.status === 401) {
+      clearToken();
+      clearUser();
+      alert('Session expired. Please log in again.');
+      window.location.href = 'index.html';
+      throw new Error('Unauthorized');
+    }
+    
+    if (!res.ok) {
+      let msg = 'API error';
+      try { 
+        const errorData = await res.json();
+        console.error('API error data:', errorData);
+        msg = errorData.detail || msg; 
+      } catch (parseError) {
+        console.error('Failed to parse error response:', parseError);
+      }
+      throw new Error(`${msg} (Status: ${res.status})`);
+    }
+    
+    return res.json();
+  } catch (error) {
+    console.error('Network or API error:', error);
+    throw error;
   }
-  if (!res.ok) {
-    let msg = 'API error';
-    try { msg = (await res.json()).detail || msg; } catch {}
-    throw new Error(msg);
-  }
-  return res.json();
 }
 
 /**
