@@ -3,3 +3,9 @@ uvicorn
 pydantic
 python-multipart
 gunicorn
+# Security packages
+passlib==1.7.4
+python-jose[cryptography]==3.3.0
+bcrypt==4.0.1
+slowapi==0.1.7
+email-validator==2.0.0
