@@ -1,11 +1,21 @@
-fastapi
-uvicorn
-pydantic
-python-multipart
-gunicorn
+# Core FastAPI stack
+fastapi==0.95.2
+uvicorn==0.23.2
+pydantic==1.10.8  # Using 1.x series for compatibility
+python-multipart==0.0.6
+gunicorn==21.2.0
+starlette==0.27.0
+
 # Security packages
-passlib==1.7.4
-python-jose[cryptography]==3.3.0
-bcrypt==4.0.1
-slowapi==0.1.7
-email-validator==2.0.0
+passlib==1.7.4             # Password hashing
+python-jose[cryptography]==3.3.0  # JWT handling
+bcrypt==4.0.1              # Password hashing
+slowapi==0.1.7             # Rate limiting
+email-validator==2.0.0     # Email validation for Pydantic
+itsdangerous==2.1.2        # Required for SessionMiddleware
+
+# Dependencies of dependencies (explicit for compatibility)
+cryptography==41.0.5       # Required for JWT and secure functionality
+
+# Fix for limits issue with python 3.13
+setuptools==69.0.2         # To address the pkg_resources warning
