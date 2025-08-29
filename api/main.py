@@ -18,9 +18,6 @@ app = FastAPI()
 Main FastAPI app instance.
 """
 
-# Redirect root to login page
-
-
 # Allow CORS for frontend
 app.add_middleware(
     CORSMiddleware,
