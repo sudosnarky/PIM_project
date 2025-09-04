@@ -3,235 +3,314 @@
 
 /**
  * Get the API base URL for backend requests.
+ * Dynamically determines if we're running in production (render.com) or local development
  * @type {string}
  */
-const API = window.location.hostname.includes('render.com') 
-  ? 'https://pim-project-qgyu.onrender.com'  // Deployment URL - update this with your actual domain
-  : window.location.origin.replace(/\/static.*/, '');
+const API_BASE_URL = window.location.hostname.includes('render.com') 
+  ? 'https://pim-project-qgyu.onrender.com'  // Production URL when deployed on Render
+  : window.location.origin.replace(/\/static.*/, '');  // Local development URL
+
+// === AUTHENTICATION TOKEN MANAGEMENT ===
+// These functions handle storing/retrieving the user's authentication token in browser storage
 
 /**
- * Get the authentication token from localStorage.
- * @returns {string|null}
+ * Retrieve the authentication token from browser's localStorage
+ * @returns {string|null} The stored token or null if not found
  */
 function getToken() {
-  return localStorage.getItem('pim_token');
+  return localStorage.getItem('pimToken');
 }
 
 /**
- * Set the authentication token in localStorage.
- * @param {string} token
+ * Store the authentication token in browser's localStorage
+ * @param {string} token - JWT token received from server after successful login
  */
 function setToken(token) {
-  localStorage.setItem('pim_token', token);
+  localStorage.setItem('pimToken', token);
 }
 
 /**
- * Remove the authentication token from localStorage.
+ * Remove the authentication token from localStorage (used during logout)
  */
 function clearToken() {
-  localStorage.removeItem('pim_token');
+  localStorage.removeItem('pimToken');
 }
 
+// === USER SESSION MANAGEMENT ===
+// These functions handle storing/retrieving the username in browser storage
+
 /**
- * Get the username from localStorage.
- * @returns {string|null}
+ * Retrieve the current username from localStorage
+ * @returns {string|null} The stored username or null if not logged in
  */
 function getUser() {
-  return localStorage.getItem('pim_user');
+  return localStorage.getItem('pimUser');
 }
 
 /**
- * Set the username in localStorage.
- * @param {string} username
+ * Store the username in localStorage after successful login
+ * @param {string} username - The user's username
  */
 function setUser(username) {
-  localStorage.setItem('pim_user', username);
+  localStorage.setItem('pimUser', username);
 }
 
 /**
- * Remove the username from localStorage.
+ * Remove the username from localStorage (used during logout)
  */
 function clearUser() {
-  localStorage.removeItem('pim_user');
+  localStorage.removeItem('pimUser');
 }
 
+// === API COMMUNICATION FUNCTION ===
 /**
- * Make an authenticated API request to the backend.
- * @param {string} path - API endpoint path
- * @param {object} opts - Fetch options
- * @returns {Promise<any>} - Parsed JSON response
+ * Makes authenticated HTTP requests to the backend API
+ * Automatically handles token authentication, JSON formatting, and error responses
+ * @param {string} path - API endpoint path (e.g., '/particles', '/login')
+ * @param {object} opts - Fetch options (method, body, headers, etc.)
+ * @returns {Promise<any>} - Parsed JSON response from server
  */
 async function apiFetch(path, opts = {}) {
+  // Initialize headers object if not provided
   opts.headers = opts.headers || {};
-  if (getToken()) opts.headers['Authorization'] = 'Bearer ' + getToken();
+  
+  // Add authentication token to request headers if user is logged in
+  if (getToken()) {
+    opts.headers['Authorization'] = 'Bearer ' + getToken();
+  }
+  
+  // Set content type to JSON for non-form data requests
   if (!opts.headers['Content-Type'] && !(opts.body instanceof FormData)) {
     opts.headers['Content-Type'] = 'application/json';
   }
+  
+  // Convert JavaScript objects to JSON strings for the request body
   if (opts.body && typeof opts.body !== 'string' && !(opts.body instanceof FormData)) {
     opts.body = JSON.stringify(opts.body);
   }
   
-  // Add better error handling and debugging for deployment
-  console.log(`Sending request to: ${API + path}`);
-  try {
-    const res = await fetch(API + path, opts);
-    console.log(`Response status: ${res.status}`);
-    
-    if (res.status === 401) {
-      clearToken();
-      clearUser();
-      alert('Session expired. Please log in again.');
-      window.location.href = 'index.html';
-      throw new Error('Unauthorized');
-    }
-    
-    if (!res.ok) {
-      let msg = 'API error';
-      try { 
-        const errorData = await res.json();
-        console.error('API error data:', errorData);
-        msg = errorData.detail || msg; 
-      } catch (parseError) {
-        console.error('Failed to parse error response:', parseError);
-      }
-      throw new Error(`${msg} (Status: ${res.status})`);
-    }
-    
-    return res.json();
-  } catch (error) {
-    console.error('Network or API error:', error);
-    throw error;
+  // Send the HTTP request to the server
+  const res = await fetch(API_BASE_URL + path, opts);
+  
+  // Handle authentication errors (invalid/expired token)
+  if (res.status === 401) {
+    // Clear stored credentials and redirect to login
+    clearToken();
+    clearUser();
+    alert('Session expired. Please log in again.');
+    window.location.href = 'index.html';
+    throw new Error('Unauthorized');
   }
+  
+  // Handle other HTTP errors
+  if (!res.ok) {
+    let msg = 'API error';
+    try { 
+      // Try to extract error message from server response
+      const errorData = await res.json();
+      msg = errorData.detail || msg; 
+    } catch (parseError) {
+      // If we can't parse the error response, use generic message
+    }
+    throw new Error(`${msg} (Status: ${res.status})`);
+  }
+  
+  // Parse and return successful response as JSON
+  return res.json();
 }
 
+// === MARKDOWN TO HTML CONVERTER ===
 /**
- * Convert Markdown to HTML for note rendering.
- * Supports headings, bold, italics, code, links, lists, blockquotes, and hashtags.
- * @param {string} md - Markdown string
- * @returns {string} - HTML string
+ * Converts Markdown syntax to HTML for display in the browser
+ * Supports headings, bold, italics, code, links, lists, blockquotes, and hashtags
+ * @param {string} md - Raw markdown text from user input
+ * @returns {string} - HTML formatted text ready for display
  */
 function markdownToHtml(md) {
   let html = md
+    // Convert markdown headings to HTML headings (# = h1, ## = h2, etc.)
     .replace(/^###### (.*$)/gim, '<h6>$1</h6>')
     .replace(/^##### (.*$)/gim, '<h5>$1</h5>')
     .replace(/^#### (.*$)/gim, '<h4>$1</h4>')
     .replace(/^### (.*$)/gim, '<h3>$1</h3>')
     .replace(/^## (.*$)/gim, '<h2>$1</h2>')
     .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+    // Convert **bold** text to <strong> tags
     .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
+    // Convert *italic* text to <em> tags
     .replace(/\*(.*?)\*/gim, '<em>$1</em>')
+    // Convert `code` text to <code> tags
     .replace(/`([^`]+)`/gim, '<code>$1</code>')
+    // Convert [link text](url) to <a> tags
     .replace(/\[(.*?)\]\((.*?)\)/gim, '<a href="$2">$1</a>')
+    // Convert > blockquotes to <blockquote> tags
     .replace(/^> (.*$)/gim, '<blockquote>$1</blockquote>')
+    // Convert empty lines to <br> tags
     .replace(/^\s*\n/gim, '<br>')
+    // Convert all remaining newlines to <br> tags
     .replace(/\n/g, '<br>');
-  // Lists
+    
+  // Convert bullet lists (* item) to HTML <ul><li> structure
   html = html.replace(/<br>\s*\* (.*?)(?=<br>|$)/g, '<ul><li>$1</li></ul>');
-  html = html.replace(/<br>\s*\d+\. (.*?)(?=<br>|$)/g, '<ol><li>$1</li></ol>');
-  // Hashtags to tags
+  // Convert numbered lists (1. item) to HTML <ol><li> structure
+  html = html.replace(/<br>\s*\d+\. (.*?)(?=<br>|$)/g, '<ol><li>$1</li></ul>');
+  // Convert #hashtags to clickable spans with special styling
   html = html.replace(/#(\w+)/g, '<span class="hashtag">#$1</span>');
+  
   return html;
 }
 
-// --- Login & Registration Page ---
+// ===== LOGIN & REGISTRATION PAGE LOGIC =====
+// This code only runs when the user is on the index.html (login) page
 if (location.pathname.endsWith('index.html')) {
+  // Get references to all the form elements and buttons on the login page
   const loginBox = document.getElementById('login-box');
   const registerBox = document.getElementById('register-box');
   const loginBtn = document.getElementById('login-btn');
   const registerBtn = document.getElementById('register-btn');
   const showRegister = document.getElementById('show-register');
   const showLogin = document.getElementById('show-login');
+  
+  // Set up toggle buttons to switch between login and registration forms
   if (showRegister && showLogin && loginBox && registerBox) {
-    showRegister.onclick = e => { e.preventDefault(); loginBox.style.display = 'none'; registerBox.style.display = ''; };
-    showLogin.onclick = e => { e.preventDefault(); registerBox.style.display = 'none'; loginBox.style.display = ''; };
+    // When "Register" link is clicked, hide login form and show register form
+    showRegister.onclick = e => {
+      e.preventDefault();  // Prevent default link behavior
+      loginBox.style.display = 'none';
+      registerBox.style.display = '';
+    };
+    // When "Login" link is clicked, hide register form and show login form
+    showLogin.onclick = e => {
+      e.preventDefault();  // Prevent default link behavior
+      registerBox.style.display = 'none';
+      loginBox.style.display = '';
+    };
   }
+  
+  // === LOGIN BUTTON HANDLER ===
   if (loginBtn) {
     loginBtn.onclick = async function(e) {
-      e.preventDefault();
+      e.preventDefault();  // Prevent form submission reload
+      
+      // Get the username and password from input fields, removing extra whitespace
       const username = document.getElementById('login-username').value.trim();
       const password = document.getElementById('login-password').value.trim();
+      
+      // Basic validation - make sure both fields are filled
       if (!username || !password) return alert('Username and password required.');
+      
       try {
+        // Create form data for the login request (API expects form data, not JSON)
         const form = new FormData();
         form.append('username', username);
         form.append('password', password);
-        const res = await fetch(API + '/token', { method: 'POST', body: form });
+        
+        // Send login request to server
+        const res = await fetch(API_BASE_URL + '/token', { method: 'POST', body: form });
         if (!res.ok) throw new Error('Login failed');
+        
+        // Parse the response to get the authentication token
         const data = await res.json();
-        setToken(data.access_token);
-        setUser(username);
-        // On first login, show onboarding
+        setToken(data.access_token);  // Store token for future API requests
+        setUser(username);           // Store username for display purposes
+        
+        // Check if this is the user's first login (show onboarding if so)
         if (!localStorage.getItem('onboarded')) {
           localStorage.setItem('onboarded', '1');
           window.location.href = 'onboarding.html';
         } else {
+          // Existing user - go straight to dashboard
           window.location.href = 'dashboard.html';
         }
       } catch (err) {
+        // Show error message if login fails
         alert('Login failed: ' + err.message);
       }
     };
   }
+  
+  // === REGISTRATION BUTTON HANDLER ===
   if (registerBtn) {
     registerBtn.onclick = async function(e) {
-      e.preventDefault();
+      e.preventDefault();  // Prevent form submission reload
+      
+      // Get the username and password from registration form inputs
       const username = document.getElementById('register-username').value.trim();
       const password = document.getElementById('register-password').value.trim();
+      
+      // Basic validation - make sure both fields are filled
       if (!username || !password) return alert('Username and password required.');
+      
       try {
+        // Send registration request to server using our API function
         await apiFetch('/register', {
           method: 'POST',
-          body: { username, password }
+          body: { username, password }  // This gets converted to JSON automatically
         });
-        // After first registration, show onboarding
+        
+        // Mark user as having seen onboarding after successful registration
         localStorage.setItem('onboarded', '1');
         window.location.href = 'onboarding.html';
       } catch (err) {
+        // Show error message if registration fails
         alert('Registration failed: ' + err.message);
       }
     };
   }
 }
 
-// --- Dashboard Page ---
+// ===== DASHBOARD PAGE LOGIC =====
+// This code only runs when the user is on the dashboard.html page
 if (location.pathname.endsWith('dashboard.html')) {
-  const paraTabs = document.querySelectorAll('.para-tab');
-  const searchInput = document.querySelector('.search-input');
-  const itemsList = document.querySelector('.items-list');
-  const createBtn = document.getElementById('create-particle-btn');
-  const logoutBtn = document.getElementById('logout-btn');
-  let currentSection = 'Projects';
-  let particles = [];
+  // Get references to all the dashboard interface elements
+  const paraTabs = document.querySelectorAll('.para-tab');     // PARA method tabs (Projects, Areas, Resources, Archives)
+  const searchInput = document.querySelector('.search-input');  // Search box for filtering notes
+  const itemsList = document.querySelector('.items-list');     // Container where note cards are displayed
+  const createBtn = document.getElementById('create-particle-btn'); // "New Note" button
+  const logoutBtn = document.getElementById('logout-btn');      // Logout button
+  
+  // Variables to track current state
+  let currentSection = 'Projects';  // Which PARA tab is currently active
+  let particles = [];               // Array to store all notes from server
 
+  // === LOGOUT BUTTON HANDLER ===
   if (logoutBtn) {
     logoutBtn.onclick = function() {
-      clearToken();
-      clearUser();
-      window.location.href = 'index.html';
+      clearToken();  // Remove authentication token from localStorage
+      clearUser();   // Remove username from localStorage
+      window.location.href = 'index.html';  // Redirect to login page
     };
   }
 
+  // === FETCH NOTES FROM SERVER ===
   async function fetchParticles() {
+    // Build URL with current section and search query
     let url = `/particles?section=${encodeURIComponent(currentSection)}`;
     const q = searchInput.value.trim();
-    if (q) url += `&q=${encodeURIComponent(q)}`;
+    if (q) url += `&q=${encodeURIComponent(q)}`;  // Add search query if user entered text
+    
     try {
+      // Get notes from API using our authenticated fetch function
       particles = await apiFetch(url);
     } catch (err) {
       alert('Failed to load notes: ' + err.message);
-      particles = [];
+      particles = [];  // Set to empty array on error
     }
   }
+
+  // === RENDER NOTES LIST IN DASHBOARD ===
   async function renderList() {
-    await fetchParticles();
-    itemsList.innerHTML = '';
+    await fetchParticles();  // Get latest data from server
+    itemsList.innerHTML = '';  // Clear existing content
+    
+    // Create a card for each note
     particles.forEach(p => {
       const card = document.createElement('div');
       card.className = 'item-card';
       card.innerHTML = `
         <div class="item-info">
           <h3 class="item-title">${p.title}</h3>
-          <p class="item-snippet" style="max-height:6em;overflow-y:auto;">${p.content.split('\n').slice(0,4).join('<br>')}</p>
+          <p class="item-snippet" style="max-height:6em;overflow-y:auto;">${p.content.split('\n').slice(0, 4).join('<br>')}</p>
         </div>
         <div class="item-actions" style="display:flex;gap:0.5em;align-items:center;">
           <a href="view.html?id=${p.id}" class="btn btn-view">View</a>
@@ -246,260 +325,297 @@ if (location.pathname.endsWith('dashboard.html')) {
           <button class="btn btn-secondary archive-btn" data-id="${p.id}" style="padding:0.2em 1em;">Archive</button>
         </div>`;
       itemsList.appendChild(card);
-      // Set current section as selected in dropdown
+      
+      // Set the dropdown to show current section of this note
       const select = card.querySelector('.move-section');
       if (select) select.value = p.section;
     });
 
-    // Move section handler
+    // === MOVE SECTION FUNCTIONALITY ===
+    // Set up event listeners for "Move" dropdowns on each note card
     itemsList.querySelectorAll('.move-section').forEach(sel => {
       sel.addEventListener('change', async function() {
-        const id = this.getAttribute('data-id');
-        const newSection = this.value;
-        const particle = particles.find(p => p.id == id);
+        const id = this.getAttribute('data-id');      // Get note ID from dropdown
+        const newSection = this.value;                // Get selected new section
+        const particle = particles.find(p => p.id === parseInt(id)); // Find the note object
         if (!particle) return;
+        
         try {
+          // Send update request to server to change note's section
           await apiFetch(`/particles/${id}`, {
             method: 'PUT',
-            body: { ...particle, section: newSection }
+            body: { ...particle, section: newSection }  // Keep all fields, just change section
           });
-          renderList();
+          renderList();  // Refresh the display after successful move
         } catch (err) {
           alert('Failed to move: ' + err.message);
         }
       });
     });
-    // Archive button handler
+    
+    // === ARCHIVE BUTTON FUNCTIONALITY ===
+    // Set up event listeners for "Archive" buttons on each note card
     itemsList.querySelectorAll('.archive-btn').forEach(btn => {
       btn.addEventListener('click', async function() {
-        const id = this.getAttribute('data-id');
-        const particle = particles.find(p => p.id == id);
+        const id = this.getAttribute('data-id');      // Get note ID from button
+        const particle = particles.find(p => p.id === parseInt(id)); // Find the note object
         if (!particle) return;
+        
         try {
+          // Send update request to move note to Archives section
           await apiFetch(`/particles/${id}`, {
             method: 'PUT',
-            body: { ...particle, section: 'Archives' }
+            body: { ...particle, section: 'Archives' }  // Set section to Archives
           });
-          renderList();
+          renderList();  // Refresh the display after successful archive
         } catch (err) {
           alert('Failed to archive: ' + err.message);
         }
       });
     });
   }
+  
+  // === PARA TAB SWITCHING ===
+  // Set up click handlers for Projects/Areas/Resources/Archives tabs
   paraTabs.forEach(tab => {
     tab.addEventListener('click', function() {
-      paraTabs.forEach(t => t.classList.remove('active'));
+      // Remove 'active' class from all tabs
+      paraTabs.forEach(t => {
+        t.classList.remove('active');
+      });
+      // Add 'active' class to clicked tab
       this.classList.add('active');
+      // Update current section and reload notes for that section
       currentSection = this.textContent;
       renderList();
     });
   });
+  
+  // === SEARCH FUNCTIONALITY ===
+  // When user types in search box, reload and filter notes
   searchInput.addEventListener('input', renderList);
   
-  // Enhanced Create Particle button handler with error checking
+  // === CREATE NEW NOTE BUTTON ===
   if (createBtn) {
     createBtn.addEventListener('click', function() {
-      try {
-        console.log("Create particle button clicked, navigating to edit.html");
-        // Make sure we don't pass an ID to avoid confusion
-        window.location.href = 'edit.html';
-      } catch (err) {
-        console.error("Error navigating to edit page:", err);
-        alert("Couldn't open edit page. Please try again.");
-      }
+      window.location.href = 'edit.html';  // Go to edit page without ID (creates new note)
     });
-  } else {
-    console.error("Create particle button not found in dashboard");
   }
   
+  // Load and display notes when page first loads
   renderList();
 }
 
-// --- Edit Page ---
+// ===== EDIT PAGE LOGIC =====
+// This code only runs when the user is on the edit.html page (creating/editing notes)
 if (location.pathname.endsWith('edit.html')) {
-  console.log("Edit page detected, initializing...");
+  // Get the note ID from URL parameters (if editing existing note)
   const urlParams = new URLSearchParams(location.search);
-  const id = urlParams.get('id');
-  const titleInput = document.querySelector('.article-header input');
-  const mdEditor = document.querySelector('.markdown-editor');
-  const tagsInput = document.querySelector('input[placeholder*="tags"]');
-  const saveBtn = document.querySelector('.btn-primary');
+  const id = urlParams.get('id');  // Will be null if creating new note
+  
+  // Get references to all form elements on the edit page
+  const titleInput = document.querySelector('.article-header input');    // Note title input field
+  const mdEditor = document.querySelector('.markdown-editor');           // Markdown content textarea
+  const tagsInput = document.querySelector('input[placeholder*="tags"]'); // Tags input field
+  const saveBtn = document.querySelector('.btn-primary');                // Save button
+  
+  // Variable to store note data when editing existing note
   let editing = null;
   
-  // Log edit mode for debugging
-  console.log(`Edit mode: ${id ? 'Editing existing particle #' + id : 'Creating new particle'}`);
-  
-  // Check if all required elements are present
-  if (!titleInput || !mdEditor || !tagsInput || !saveBtn) {
-    console.error("Required edit page elements missing:", {
-      titleInput: !!titleInput,
-      mdEditor: !!mdEditor,
-      tagsInput: !!tagsInput,
-      saveBtn: !!saveBtn
-    });
-  }
-  
+  // === LOAD EXISTING NOTE FOR EDITING ===
   async function loadParticle() {
-    // For new particles (no id), leave fields empty
-    if (!id) {
-      console.log("New particle mode - fields left empty");
-      return;
-    }
+    if (!id) return;  // If no ID, we're creating a new note, so nothing to load
     
     try {
-      console.log(`Loading particle #${id} for editing`);
+      // Fetch the existing note from the server
       editing = await apiFetch(`/particles/${id}`);
+      
+      // Populate form fields with existing note data
       titleInput.value = editing.title;
       mdEditor.value = editing.content;
+      // Convert tags array back to comma-separated string for display
       tagsInput.value = (editing.tags || []).join(', ');
-      console.log("Successfully loaded particle data");
     } catch (err) {
-      console.error("Failed to load particle:", err);
       alert('Failed to load note: ' + err.message);
     }
   }
+  
+  // === SAVE NOTE FUNCTIONALITY ===
   saveBtn.addEventListener('click', async function(e) {
-    e.preventDefault();
-    console.log("Save button clicked");
+    e.preventDefault();  // Prevent form submission
     
+    // Get values from form fields, removing extra whitespace
     const title = titleInput.value.trim();
     const content = mdEditor.value.trim();
     
-    // Validate required fields
+    // Validation - ensure required fields are filled
     if (!title) {
       alert('Title is required.');
-      titleInput.focus();
+      titleInput.focus();  // Focus on the empty field for user convenience
       return;
     }
     
     if (!content) {
       alert('Content is required.');
-      mdEditor.focus();
+      mdEditor.focus();    // Focus on the empty field for user convenience
       return;
     }
     
-    // Robust tag handling: split by comma, trim, filter empty, always send array
+    // Process tags input - convert comma-separated string to clean array
     let tags = [];
     try {
       tags = tagsInput.value
-        .split(',')
-        .map(t => t.trim())
-        .filter((t, i, arr) => t && arr.indexOf(t) === i); // remove empty and duplicates
+        .split(',')                    // Split by commas
+        .map(t => t.trim())            // Remove whitespace from each tag
+        .filter((t, i, arr) => t && arr.indexOf(t) === i); // Remove empty tags and duplicates
     } catch (e) {
-      console.error("Error processing tags:", e);
-      tags = [];
+      tags = [];  // If processing fails, use empty array
     }
     
-    // Safety check
+    // Safety check - ensure tags is always an array
     if (!Array.isArray(tags)) tags = [];
     
     try {
-      console.log(`Saving particle: ${editing ? 'UPDATE' : 'CREATE'}`);
-      let particle;
+      let particle;  // Variable to store the saved note
       
       if (editing) {
-        console.log(`Updating particle #${id}`);
+        // UPDATING EXISTING NOTE
         particle = await apiFetch(`/particles/${id}`, {
           method: 'PUT',
           body: { 
             title, 
             content, 
             tags, 
-            section: editing.section || 'Projects' 
+            section: editing.section || 'Projects'  // Keep existing section or default to Projects
           }
         });
       } else {
-        console.log("Creating new particle");
+        // CREATING NEW NOTE
         particle = await apiFetch('/particles', {
           method: 'POST',
           body: { 
             title, 
             content, 
             tags, 
-            section: 'Projects' 
+            section: 'Projects'  // New notes default to Projects section
           }
         });
       }
       
-      console.log(`Particle saved successfully with ID: ${particle.id}`);
+      // After successful save, redirect to view the note
       window.location.href = `view.html?id=${particle.id}`;
     } catch (err) {
       alert('Save failed: ' + err.message);
     }
   });
+  
+  // Load existing note data if we're editing (not creating new)
   loadParticle();
 }
 
-// --- View Page ---
+// ===== VIEW PAGE LOGIC =====
+// This code only runs when the user is on the view.html page (reading a note)
 if (location.pathname.endsWith('view.html')) {
+  // Get the note ID from URL parameters
   const urlParams = new URLSearchParams(location.search);
   const id = urlParams.get('id');
-  const h1 = document.querySelector('.article-header h1');
-  const contentDiv = document.querySelector('.article-content');
-  const tagsDiv = document.querySelector('.tags-container');
-  // Modal for tag search results
+  
+  // Get references to page elements where we'll display note content
+  const h1 = document.querySelector('.article-header h1');        // Note title display
+  const contentDiv = document.querySelector('.article-content');   // Note content display
+  const tagsDiv = document.querySelector('.tags-container');       // Tags display area
+  
+  // === TAG MODAL FUNCTIONALITY ===
+  // Shows a popup window listing all notes that have a specific tag
   function showTagModal(tag, particles) {
+    // Create modal overlay element with dark background
     let modal = document.createElement('div');
     modal.style.position = 'fixed';
     modal.style.top = '0';
     modal.style.left = '0';
     modal.style.width = '100vw';
     modal.style.height = '100vh';
-    modal.style.background = 'rgba(0,0,0,0.7)';
-    modal.style.zIndex = '9999';
+    modal.style.background = 'rgba(0,0,0,0.7)';  // Semi-transparent dark overlay
+    modal.style.zIndex = '9999';                 // Ensure modal appears above everything
     modal.style.display = 'flex';
     modal.style.alignItems = 'center';
     modal.style.justifyContent = 'center';
+    
+    // Create modal content with list of related notes
     modal.innerHTML = `<div style="background:#222;padding:2em;max-width:600px;width:90vw;border-radius:16px;max-height:80vh;overflow:auto;">
       <h2 style="margin-bottom:1em;">Particles with tag <span class='hashtag'>#${tag}</span></h2>
       <button style="float:right;margin-top:-2.5em;margin-right:-2em;font-size:1.5em;background:none;border:none;color:#fff;cursor:pointer;" id="close-tag-modal">&times;</button>
       <div id="tag-particles-list"></div>
     </div>`;
+    
+    // Add modal to page and set up close button
     document.body.appendChild(modal);
     document.getElementById('close-tag-modal').onclick = () => modal.remove();
+    
+    // Populate the modal with notes that have this tag
     const list = modal.querySelector('#tag-particles-list');
     if (particles.length === 0) {
       list.innerHTML = '<p>No particles found for this tag.</p>';
     } else {
+      // Create a card for each related note
       list.innerHTML = particles.map(p =>
         `<div style='margin-bottom:1em;padding:1em;background:#333;border-radius:10px;'>
           <h3 style='margin:0 0 0.5em 0;'>${p.title}</h3>
           <div style='font-size:0.95em;color:#aaa;margin-bottom:0.5em;'>${p.section} &middot; ${p.created ? p.created.split('T')[0] : ''}</div>
-          <div style='margin-bottom:0.5em;'>${(p.tags||[]).map(t=>`<span class='hashtag'>#${t}</span>`).join(' ')}</div>
+          <div style='margin-bottom:0.5em;'>${(p.tags || []).map(t => `<span class='hashtag'>#${t}</span>`).join(' ')}</div>
           <a href="view.html?id=${p.id}" class="btn btn-view">View</a>
         </div>`
       ).join('');
     }
   }
 
+  // === LOAD AND DISPLAY NOTE ===
   async function loadParticle() {
     try {
+      // Fetch the note data from the server
       const particle = await apiFetch(`/particles/${id}`);
+      
+      // Display the note title
       h1.textContent = particle.title;
+      
+      // Convert markdown content to HTML and display it
       contentDiv.innerHTML = markdownToHtml(particle.content);
+      
+      // Create tags display with the note ID and user-defined tags
       tagsDiv.innerHTML = `<span class="tag tag-id">#${particle.id}</span>` +
-        (particle.tags || []).map((t,i) => `<span class="tag tag-${['','purple','orange'][i%3]} tag-clickable" data-tag="${t}">${t}</span>`).join('');
+        (particle.tags || []).map((t, i) => 
+          `<span class="tag tag-${['purple', 'orange'][i % 2]} tag-clickable" data-tag="${t}">${t}</span>`
+        ).join('');
 
-      // Add click event to tags
+      // Make user-defined tags clickable to show related notes
       tagsDiv.querySelectorAll('.tag-clickable').forEach(tagEl => {
-        tagEl.style.cursor = 'pointer';
+        tagEl.style.cursor = 'pointer';  // Show pointer cursor on hover
         tagEl.onclick = async function() {
-          const tag = this.getAttribute('data-tag');
+          const tag = this.getAttribute('data-tag');  // Get the tag name
           let particles = [];
+          
           try {
-            // Fetch all particles for the user and filter by tag
+            // Fetch all notes and filter by this tag
             particles = await apiFetch(`/particles`);
-            particles = particles.filter(p => (p.tags||[]).map(t=>t.toLowerCase()).includes(tag.toLowerCase()));
-          } catch {}
+            particles = particles.filter(p => 
+              (p.tags || []).map(t => t.toLowerCase()).includes(tag.toLowerCase())
+            );
+          } catch (err) {
+            // If API call fails, show modal with empty list
+          }
+          
+          // Show modal with all notes that have this tag
           showTagModal(tag, particles);
         };
       });
     } catch (err) {
+      // If note loading fails, show error message
       h1.textContent = 'Not found';
       contentDiv.textContent = err.message;
-      tagsDiv.innerHTML = '';
+      tagsDiv.innerHTML = '';  // Clear tags area on error
     }
   }
+  
+  // Load and display the note when page loads
   loadParticle();
 }
