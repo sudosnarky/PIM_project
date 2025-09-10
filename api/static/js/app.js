@@ -27,6 +27,21 @@ function getToken() {
  */
 function setToken(token) {
   localStorage.setItem('pimToken', token);
+  // Store token timestamp for expiration checking (24 hour expiry)
+  localStorage.setItem('pimTokenTime', Date.now().toString());
+}
+
+/**
+ * Check if the stored token is expired (24 hour limit)
+ * @returns {boolean} - True if token is expired or missing
+ */
+function isTokenExpired() {
+  const tokenTime = localStorage.getItem('pimTokenTime');
+  if (!tokenTime) return true;
+  
+  const tokenAge = Date.now() - parseInt(tokenTime);
+  const twentyFourHours = 24 * 60 * 60 * 1000;
+  return tokenAge > twentyFourHours;
 }
 
 /**
@@ -34,6 +49,7 @@ function setToken(token) {
  */
 function clearToken() {
   localStorage.removeItem('pimToken');
+  localStorage.removeItem('pimTokenTime');
 }
 
 // === USER SESSION MANAGEMENT ===
@@ -71,6 +87,15 @@ function clearUser() {
  * @returns {Promise<any>} - Parsed JSON response from server
  */
 async function apiFetch(path, opts = {}) {
+  // Check for token expiration before making request
+  if (getToken() && isTokenExpired()) {
+    clearToken();
+    clearUser();
+    alert('Your session has expired. Please log in again.');
+    window.location.href = 'index.html';
+    throw new Error('Token expired');
+  }
+  
   // Initialize headers object if not provided
   opts.headers = opts.headers || {};
   
@@ -119,15 +144,68 @@ async function apiFetch(path, opts = {}) {
   return res.json();
 }
 
+// === SECURITY UTILITIES ===
+/**
+ * Escape HTML characters to prevent XSS attacks
+ * @param {string} unsafe - User input that may contain malicious HTML
+ * @returns {string} - Safe HTML-escaped text
+ */
+function escapeHtml(unsafe) {
+  if (typeof unsafe !== 'string') return '';
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+/**
+ * Validate input length to prevent excessive data
+ * @param {string} input - Input to validate
+ * @param {number} maxLength - Maximum allowed length
+ * @param {string} fieldName - Name of field for error messages
+ * @returns {boolean} - True if valid, false otherwise
+ */
+function validateLength(input, maxLength, fieldName) {
+  if (input.length > maxLength) {
+    alert(`${fieldName} must be under ${maxLength} characters (currently ${input.length})`);
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Validate and sanitize tag input
+ * @param {string} tagString - Comma-separated tag string
+ * @returns {string[]} - Array of valid, sanitized tags
+ */
+function validateTags(tagString) {
+  if (!tagString) return [];
+  
+  return tagString
+    .split(',')
+    .map(t => t.trim())
+    .filter(t => {
+      // Only allow alphanumeric, hyphens, and underscores
+      return t && /^[a-zA-Z0-9_-]+$/.test(t) && t.length <= 50;
+    })
+    .filter((t, i, arr) => arr.indexOf(t) === i) // Remove duplicates
+    .slice(0, 10); // Limit to 10 tags max
+}
+
 // === MARKDOWN TO HTML CONVERTER ===
 /**
  * Converts Markdown syntax to HTML for display in the browser
  * Supports headings, bold, italics, code, links, lists, blockquotes, and hashtags
  * @param {string} md - Raw markdown text from user input
- * @returns {string} - HTML formatted text ready for display
+ * @returns {string} - Sanitized HTML formatted text ready for display
  */
 function markdownToHtml(md) {
-  let html = md
+  if (typeof md !== 'string') return '';
+  
+  // First escape any existing HTML to prevent XSS
+  let html = escapeHtml(md)
     // Convert markdown headings to HTML headings (# = h1, ## = h2, etc.)
     .replace(/^###### (.*$)/gim, '<h6>$1</h6>')
     .replace(/^##### (.*$)/gim, '<h5>$1</h5>')
@@ -141,10 +219,10 @@ function markdownToHtml(md) {
     .replace(/\*(.*?)\*/gim, '<em>$1</em>')
     // Convert `code` text to <code> tags
     .replace(/`([^`]+)`/gim, '<code>$1</code>')
-    // Convert [link text](url) to <a> tags
-    .replace(/\[(.*?)\]\((.*?)\)/gim, '<a href="$2">$1</a>')
+    // Convert [link text](url) to <a> tags with safe URL validation
+    .replace(/\[(.*?)\]\((https?:\/\/[^\s)]+)\)/gim, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
     // Convert > blockquotes to <blockquote> tags
-    .replace(/^> (.*$)/gim, '<blockquote>$1</blockquote>')
+    .replace(/^&gt; (.*$)/gim, '<blockquote>$1</blockquote>')
     // Convert empty lines to <br> tags
     .replace(/^\s*\n/gim, '<br>')
     // Convert all remaining newlines to <br> tags
@@ -153,7 +231,7 @@ function markdownToHtml(md) {
   // Convert bullet lists (* item) to HTML <ul><li> structure
   html = html.replace(/<br>\s*\* (.*?)(?=<br>|$)/g, '<ul><li>$1</li></ul>');
   // Convert numbered lists (1. item) to HTML <ol><li> structure
-  html = html.replace(/<br>\s*\d+\. (.*?)(?=<br>|$)/g, '<ol><li>$1</li></ul>');
+  html = html.replace(/<br>\s*\d+\. (.*?)(?=<br>|$)/g, '<ol><li>$1</li></ol>');
   // Convert #hashtags to clickable spans with special styling
   html = html.replace(/#(\w+)/g, '<span class="hashtag">#$1</span>');
   
@@ -199,6 +277,10 @@ if (location.pathname.endsWith('index.html')) {
       // Basic validation - make sure both fields are filled
       if (!username || !password) return alert('Username and password required.');
       
+      // Validate input lengths
+      if (!validateLength(username, 50, 'Username')) return;
+      if (!validateLength(password, 100, 'Password')) return;
+      
       try {
         // Create form data for the login request (API expects form data, not JSON)
         const form = new FormData();
@@ -240,6 +322,10 @@ if (location.pathname.endsWith('index.html')) {
       
       // Basic validation - make sure both fields are filled
       if (!username || !password) return alert('Username and password required.');
+      
+      // Validate input lengths  
+      if (!validateLength(username, 50, 'Username')) return;
+      if (!validateLength(password, 100, 'Password')) return;
       
       try {
         // Send registration request to server using our API function
@@ -309,8 +395,8 @@ if (location.pathname.endsWith('dashboard.html')) {
       card.className = 'item-card';
       card.innerHTML = `
         <div class="item-info">
-          <h3 class="item-title">${p.title}</h3>
-          <p class="item-snippet" style="max-height:6em;overflow-y:auto;">${p.content.split('\n').slice(0, 4).join('<br>')}</p>
+          <h3 class="item-title">${escapeHtml(p.title)}</h3>
+          <p class="item-snippet" style="max-height:6em;overflow-y:auto;">${escapeHtml(p.content.split('\n').slice(0, 4).join(' '))}</p>
         </div>
         <div class="item-actions" style="display:flex;gap:0.5em;align-items:center;">
           <a href="view.html?id=${p.id}" class="btn btn-view">View</a>
@@ -461,19 +547,19 @@ if (location.pathname.endsWith('edit.html')) {
       return;
     }
     
-    // Process tags input - convert comma-separated string to clean array
-    let tags = [];
-    try {
-      tags = tagsInput.value
-        .split(',')                    // Split by commas
-        .map(t => t.trim())            // Remove whitespace from each tag
-        .filter((t, i, arr) => t && arr.indexOf(t) === i); // Remove empty tags and duplicates
-    } catch (e) {
-      tags = [];  // If processing fails, use empty array
+    // Validate input lengths
+    if (!validateLength(title, 255, 'Title')) {
+      titleInput.focus();
+      return;
     }
     
-    // Safety check - ensure tags is always an array
-    if (!Array.isArray(tags)) tags = [];
+    if (!validateLength(content, 10000, 'Content')) {
+      mdEditor.focus();
+      return;
+    }
+    
+    // Process and validate tags input
+    let tags = validateTags(tagsInput.value);
     
     try {
       let particle;  // Variable to store the saved note
@@ -543,7 +629,7 @@ if (location.pathname.endsWith('view.html')) {
     
     // Create modal content with list of related notes
     modal.innerHTML = `<div style="background:#222;padding:2em;max-width:600px;width:90vw;border-radius:16px;max-height:80vh;overflow:auto;">
-      <h2 style="margin-bottom:1em;">Particles with tag <span class='hashtag'>#${tag}</span></h2>
+      <h2 style="margin-bottom:1em;">Particles with tag <span class='hashtag'>#${escapeHtml(tag)}</span></h2>
       <button style="float:right;margin-top:-2.5em;margin-right:-2em;font-size:1.5em;background:none;border:none;color:#fff;cursor:pointer;" id="close-tag-modal">&times;</button>
       <div id="tag-particles-list"></div>
     </div>`;
@@ -560,9 +646,9 @@ if (location.pathname.endsWith('view.html')) {
       // Create a card for each related note
       list.innerHTML = particles.map(p =>
         `<div style='margin-bottom:1em;padding:1em;background:#333;border-radius:10px;'>
-          <h3 style='margin:0 0 0.5em 0;'>${p.title}</h3>
-          <div style='font-size:0.95em;color:#aaa;margin-bottom:0.5em;'>${p.section} &middot; ${p.created ? p.created.split('T')[0] : ''}</div>
-          <div style='margin-bottom:0.5em;'>${(p.tags || []).map(t => `<span class='hashtag'>#${t}</span>`).join(' ')}</div>
+          <h3 style='margin:0 0 0.5em 0;'>${escapeHtml(p.title)}</h3>
+          <div style='font-size:0.95em;color:#aaa;margin-bottom:0.5em;'>${escapeHtml(p.section)} &middot; ${p.created ? escapeHtml(p.created.split('T')[0]) : ''}</div>
+          <div style='margin-bottom:0.5em;'>${(p.tags || []).map(t => `<span class='hashtag'>#${escapeHtml(t)}</span>`).join(' ')}</div>
           <a href="view.html?id=${p.id}" class="btn btn-view">View</a>
         </div>`
       ).join('');
@@ -584,7 +670,7 @@ if (location.pathname.endsWith('view.html')) {
       // Create tags display with the note ID and user-defined tags
       tagsDiv.innerHTML = `<span class="tag tag-id">#${particle.id}</span>` +
         (particle.tags || []).map((t, i) => 
-          `<span class="tag tag-${['purple', 'orange'][i % 2]} tag-clickable" data-tag="${t}">${t}</span>`
+          `<span class="tag tag-${['purple', 'orange'][i % 2]} tag-clickable" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</span>`
         ).join('');
 
       // Make user-defined tags clickable to show related notes
