@@ -93,7 +93,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()):
     db = get_db()
     cur = db.execute("SELECT * FROM users WHERE username=?", (form_data.username,))
     user = cur.fetchone()
-    if not user or user["password"] != hash_password(form_data.password):
+    if not user or not verify_password(form_data.password, user["password"]):
         raise HTTPException(status_code=400, detail="Invalid credentials")
     token = secrets.token_hex(16)
     tokens[token] = form_data.username
