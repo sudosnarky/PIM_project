@@ -5,6 +5,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
+from passlib.context import CryptContext
 from typing import List, Optional
 import sqlite3
 import hashlib
@@ -51,15 +52,13 @@ def get_db():
     return conn
 
 
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
 def hash_password(password: str) -> str:
-    """
-    Hashes a password using SHA-256.
-    Args:
-        password (str): The user's password.
-    Returns:
-        str: The hashed password.
-    """
-    return hashlib.sha256(password.encode()).hexdigest()
+    return pwd_context.hash(password)
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return pwd_context.verify(plain_password, hashed_password)
 
 # --- Models ---
 
