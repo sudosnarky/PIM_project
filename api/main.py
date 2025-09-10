@@ -60,8 +60,10 @@ def get_db():
         Uses sqlite3.Row factory to access columns by name instead of index,
         making the code more readable and maintainable.
     """
-    conn = sqlite3.connect("pim.db")
+    conn = sqlite3.connect("pim.db", timeout=30.0, check_same_thread=False)
     conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA journal_mode=WAL")
+    conn.execute("PRAGMA busy_timeout=30000")
     return conn
 
 # Password hashing
@@ -213,6 +215,8 @@ def register(user: User):
         return {"msg": "User registered"}
     except sqlite3.IntegrityError:
         raise HTTPException(status_code=400, detail="Username already exists")
+    finally:
+        db.close()
 
 # Particle CRUD
 @app.get("/particles", response_model=List[Particle])
