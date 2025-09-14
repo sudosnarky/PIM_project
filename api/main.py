@@ -1,398 +1,339 @@
+"""
+PARA InfoSystem API - Main Application Entry Point
 
-# PARA InfoSystem API (FastAPI + SQLite + bcrypt)
+A secure, well-architected note-taking application implementing the PARA method 
+(Projects, Areas, Resources, Archives) with FastAPI, SQLite, and comprehensive 
+security features.
+
+This is the main application file that ties together all modules and provides
+the FastAPI application instance with proper middleware, error handling,
+and documentation.
 """
-A secure note-taking application implementing the PARA method (Projects, Areas, Resources, Archives).
-Features user authentication with bcrypt password hashing, SQLite database storage,
-and a RESTful API for managing personal knowledge particles.
-"""
-from fastapi import FastAPI, HTTPException, Depends
+import logging
+import sys
+import time
+from contextlib import asynccontextmanager
+from typing import Dict, Any, Callable, AsyncGenerator
+
+from fastapi import FastAPI, HTTPException, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import RedirectResponse
-from pydantic import BaseModel
-from passlib.context import CryptContext
-from typing import List, Optional
-import sqlite3, secrets
+from fastapi.responses import RedirectResponse, JSONResponse
+from fastapi.exceptions import RequestValidationError
 
-app = FastAPI(
-    title="PARA InfoSystem API",
-    description="Personal knowledge management system using the PARA method",
-    version="1.0.0"
+# Import our modules
+from config import settings
+from database import init_database, db_manager
+from routes import routers
+from models import ErrorResponse
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO if not settings.debug else logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout),
+        logging.FileHandler('api.log') if not settings.debug else logging.NullHandler()
+    ]
 )
 
-# CORS for frontend
-"""
-Cross-Origin Resource Sharing (CORS) configuration allows the frontend JavaScript
-to make API requests from different origins (localhost during development, 
-render.com in production). Essential for web applications with separate frontend/backend.
-"""
+logger = logging.getLogger(__name__)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+    """
+    Application lifespan events - startup and shutdown.
+    
+    This function handles application initialization and cleanup,
+    including database setup and connection management.
+    
+    Args:
+        app: FastAPI application instance
+        
+    Yields:
+        None: Control returns to the application runtime
+    """
+    # Startup
+    logger.info("Starting PARA InfoSystem API...")
+    
+    try:
+        # Initialize database schema
+        init_database()
+        logger.info("Database initialized successfully")
+        
+        # Verify database health
+        if not db_manager.health_check():
+            logger.error("Database health check failed!")
+            raise Exception("Database is not healthy")
+        
+        logger.info("Application startup completed successfully")
+        
+    except Exception as e:
+        logger.error(f"Startup failed: {e}")
+        sys.exit(1)
+    
+    yield
+    
+    # Shutdown
+    logger.info("Shutting down PARA InfoSystem API...")
+    # Add any cleanup code here if needed
+    logger.info("Shutdown completed")
+
+
+# Create FastAPI application
+app = FastAPI(
+    title=settings.app_name,
+    description="""
+    A secure personal knowledge management system implementing the PARA method.
+    
+    ## Features
+    
+    * **User Authentication**: Secure bcrypt password hashing with token-based auth
+    * **PARA Method**: Organize notes into Projects, Areas, Resources, and Archives
+    * **Full-Text Search**: Search across all your particles
+    * **Tagging System**: Categorize and find content with tags
+    * **Markdown Support**: Rich text formatting with markdown
+    * **RESTful API**: Well-documented API with OpenAPI specification
+    
+    ## Authentication
+    
+    Use `/auth/token` endpoint to get a bearer token, then include it in the 
+    Authorization header: `Authorization: Bearer <your-token>`
+    
+    ## PARA Method
+    
+    * **Projects**: Things with a deadline and specific outcome
+    * **Areas**: Standards to maintain over time
+    * **Resources**: Topics of ongoing interest
+    * **Archives**: Inactive items from other categories
+    """,
+    version=settings.version,
+    lifespan=lifespan,
+    docs_url="/docs" if settings.debug else None,  # Disable docs in production
+    redoc_url="/redoc" if settings.debug else None,
+    openapi_url="/openapi.json" if settings.debug else None,
+)
+
+# =====================================================
+# MIDDLEWARE CONFIGURATION
+# =====================================================
+
+# CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*", "https://pim-project.onrender.com", "http://localhost:8000"],
+    allow_origins=settings.cors_origins,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allow_headers=["*", "Authorization", "Content-Type"],
-    expose_headers=["*"]
+    allow_headers=["Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"],
+    expose_headers=["Content-Type"],
 )
 
-# Redirect root to login page
-@app.get("/", include_in_schema=False)
-async def root():
+# Request logging middleware
+@app.middleware("http")
+async def log_requests(request: Request, call_next: Callable) -> Response:
     """
-    Root endpoint that redirects users to the login page.
-    include_in_schema=False hides this endpoint from auto-generated API docs.
+    Log all incoming requests for monitoring and debugging.
+    
+    Args:
+        request: The incoming HTTP request
+        call_next: The next middleware/handler in the chain
+        
+    Returns:
+        Response: The HTTP response from downstream handlers
     """
-    return RedirectResponse(url="/static/html/index.html")
+    start_time = time.time()
+    
+    # Log request
+    logger.debug(f"Request: {request.method} {request.url}")
+    
+    try:
+        response = await call_next(request)
+        
+        # Log response
+        process_time = time.time() - start_time
+        logger.debug(
+            f"Response: {response.status_code} - {process_time:.3f}s"
+        )
+        
+        return response
+        
+    except Exception as e:
+        process_time = time.time() - start_time
+        logger.error(
+            f"Request failed: {request.method} {request.url} - "
+            f"{process_time:.3f}s - Error: {str(e)}"
+        )
+        raise
 
-# Serve static files
+
+# =====================================================
+# ERROR HANDLERS
+# =====================================================
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
+    """
+    Handle validation errors with detailed error messages.
+    
+    Args:
+        request: The incoming HTTP request
+        exc: The validation exception that occurred
+        
+    Returns:
+        JSONResponse: Formatted error response with validation details
+    """
+    """Handle request validation errors with detailed messages."""
+    logger.warning(f"Validation error for {request.url}: {exc}")
+    
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        content=ErrorResponse(
+            detail="Request validation failed",
+            error_code="VALIDATION_ERROR"
+        ).dict()
+    )
+
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException) -> JSONResponse:
+    """
+    Handle HTTP exceptions with consistent error format.
+    
+    Args:
+        request: The incoming HTTP request
+        exc: The HTTP exception that occurred
+        
+    Returns:
+        JSONResponse: Formatted error response
+    """
+    """Handle HTTP exceptions with consistent error format."""
+    logger.warning(f"HTTP exception for {request.url}: {exc.status_code} - {exc.detail}")
+    
+    return JSONResponse(
+        status_code=exc.status_code,
+        content=ErrorResponse(
+            detail=exc.detail,
+            error_code=f"HTTP_{exc.status_code}"
+        ).dict()
+    )
+
+
+@app.exception_handler(Exception)
+async def general_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+    """
+    Handle all other exceptions as internal server errors.
+    
+    Args:
+        request: The incoming HTTP request
+        exc: The exception that occurred
+        
+    Returns:
+        JSONResponse: Generic error response for unhandled exceptions
+    """
+    """Handle unexpected exceptions with generic error message."""
+    logger.error(f"Unexpected error for {request.url}: {exc}", exc_info=True)
+    
+    # Don't expose internal error details in production
+    detail = str(exc) if settings.debug else "Internal server error"
+    
+    return JSONResponse(
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        content=ErrorResponse(
+            detail=detail,
+            error_code="INTERNAL_ERROR"
+        ).dict()
+    )
+
+
+# =====================================================
+# ROUTE REGISTRATION
+# =====================================================
+
+# Include all route modules
+for router in routers:
+    app.include_router(router, prefix="/api/v1")
+
+# Static file serving
 app.mount("/static", StaticFiles(directory="static", html=True), name="static")
 
-# Database connection
-def get_db():
+# Root redirect
+@app.get("/", include_in_schema=False)
+async def root() -> RedirectResponse:
     """
-    Creates and returns a SQLite database connection.
+    Root endpoint that redirects users to the login page.
     
     Returns:
-        sqlite3.Connection: Database connection with Row factory for dict-like access.
-        
-    Note:
-        Uses sqlite3.Row factory to access columns by name instead of index,
-        making the code more readable and maintainable.
+        RedirectResponse: Redirect to the login interface
     """
-    conn = sqlite3.connect("pim.db", timeout=30.0, check_same_thread=False)
-    conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA journal_mode=WAL")
-    conn.execute("PRAGMA busy_timeout=30000")
-    return conn
+    """Redirect root URL to the main application."""
+    return RedirectResponse(url="/static/html/index.html")
 
-# Password hashing
-"""
-Secure password hashing using bcrypt algorithm.
-bcrypt is cryptographically secure, slow by design to prevent brute force attacks,
-and includes built-in salt generation for each password.
-"""
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-def hash_password(password: str) -> str:
+# Health check endpoint
+@app.get("/health", tags=["System"])
+async def health_check() -> Dict[str, Any]:
     """
-    Hash a plain text password using bcrypt.
+    Health check endpoint for monitoring and load balancers.
     
-    Args:
-        password: Plain text password to hash
-        
     Returns:
-        str: Bcrypt-hashed password with salt
+        Dict[str, Any]: Health status information
     """
-    return pwd_context.hash(password)
-
-def verify_password(plain: str, hashed: str) -> bool:
-    """
-    Verify a plain text password against a hashed password.
-    
-    Args:
-        plain: Plain text password from user input
-        hashed: Stored bcrypt hash from database
-        
-    Returns:
-        bool: True if password matches, False otherwise
-    """
-    return pwd_context.verify(plain, hashed)
-
-# Models
-class User(BaseModel):
-    """
-    Pydantic model for user registration and authentication.
-    
-    Attributes:
-        username: Unique identifier for the user
-        password: Plain text password (automatically validated and hashed before storage)
-    """
-    username: str
-    password: str
-
-class Particle(BaseModel):
-    """
-    Pydantic model representing a knowledge particle (note/task/resource).
-    
-    Attributes:
-        id: Auto-generated unique identifier (None for new particles)
-        title: Human-readable title for the particle
-        content: Main content in markdown format
-        tags: List of tags for categorization and search
-        section: PARA method section (Projects/Areas/Resources/Archives)
-        created: ISO timestamp when particle was created (auto-generated)
-        user: Username of the particle owner (auto-assigned)
-    """
-    id: Optional[int] = None
-    title: str
-    content: str
-    tags: List[str] = []
-    section: str
-    created: Optional[str] = None
-    user: Optional[str] = None
-
-# Auth
-"""
-Authentication system using OAuth2 with Bearer tokens.
-Simple in-memory token storage suitable for development/demo.
-In production, consider Redis or database storage for scalability.
-"""
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
-tokens = {}  # In-memory token store: {token: username}
-
-@app.post("/token")
-def login(form_data: OAuth2PasswordRequestForm = Depends()):
-    """
-    Authenticate user and return access token.
-    
-    Args:
-        form_data: OAuth2 form data containing username/password
-        
-    Returns:
-        dict: Access token and token type for Authorization header
-        
-    Raises:
-        HTTPException: 400 if credentials are invalid
-        
-    Note:
-        Expects form data (not JSON) as per OAuth2 specification.
-        Frontend should send FormData, not JSON for this endpoint.
-    """
-    db = get_db()
-    cur = db.execute("SELECT * FROM users WHERE username=?", (form_data.username,))
-    user = cur.fetchone()
-    if not user or not verify_password(form_data.password, user["password"]):
-        raise HTTPException(status_code=400, detail="Invalid credentials")
-    token = secrets.token_hex(16)  # Generate random hex token
-    tokens[token] = form_data.username
-    return {"access_token": token, "token_type": "bearer"}
-
-def get_current_user(token: str = Depends(oauth2_scheme)):
-    """
-    Dependency to extract and validate the current user from JWT token.
-    
-    Args:
-        token: Bearer token from Authorization header
-        
-    Returns:
-        str: Username of the authenticated user
-        
-    Raises:
-        HTTPException: 401 if token is invalid or expired
-        
-    Note:
-        Used as a dependency in protected endpoints via Depends().
-        FastAPI automatically extracts token from "Authorization: Bearer <token>" header.
-    """
-    username = tokens.get(token)
-    if not username:
-        raise HTTPException(status_code=401, detail="Invalid token")
-    return username
-
-@app.post("/register")
-def register(user: User):
-    """
-    Register a new user account.
-    
-    Args:
-        user: User model containing username and password
-        
-    Returns:
-        dict: Success message
-        
-    Raises:
-        HTTPException: 400 if username already exists
-        
-    Note:
-        Password is automatically hashed using bcrypt before database storage.
-        Username uniqueness is enforced by database PRIMARY KEY constraint.
-    """
-    db = get_db()
     try:
-        db.execute("INSERT INTO users (username, password) VALUES (?, ?)", (user.username, hash_password(user.password)))
-        db.commit()
-        return {"msg": "User registered"}
-    except sqlite3.IntegrityError:
-        raise HTTPException(status_code=400, detail="Username already exists")
-    finally:
-        db.close()
+        db_healthy = db_manager.health_check()
+        
+        return {
+            "status": "healthy" if db_healthy else "unhealthy",
+            "version": settings.version,
+            "database": "connected" if db_healthy else "disconnected",
+            "timestamp": time.time()
+        }
+    except Exception as e:
+        logger.error(f"Health check failed: {e}")
+        return {
+            "status": "unhealthy",
+            "version": settings.version,
+            "database": "error",
+            "error": str(e),
+            "timestamp": time.time()
+        }
 
-# Particle CRUD
-@app.get("/particles", response_model=List[Particle])
-def list_particles(section: Optional[str] = None, q: Optional[str] = None, user: str = Depends(get_current_user)):
-    """
-    Retrieve particles for the authenticated user with optional filtering.
-    
-    Args:
-        section: Filter by PARA section (Projects/Areas/Resources/Archives)
-        q: Search query to match against title and content
-        user: Current authenticated user (injected by dependency)
-        
-    Returns:
-        List[Particle]: List of particles matching the criteria
-        
-    Note:
-        - Only returns particles owned by the authenticated user
-        - Supports full-text search across title and content
-        - Tags are stored as comma-separated strings, converted to lists in response
-    """
-    db = get_db()
-    sql = "SELECT * FROM particles WHERE user=?"
-    params = [user]
-    if section:
-        sql += " AND section=?"
-        params.append(section)
-    if q:
-        sql += " AND (title LIKE ? OR content LIKE ?)"
-        params.extend([f"%{q}%", f"%{q}%"])
-    cur = db.execute(sql, params)
-    rows = cur.fetchall()
-    result = []
-    for row in rows:
-        data = dict(row)
-        data["tags"] = row["tags"].split(",") if row["tags"] else []
-        result.append(Particle(**data))
-    return result
 
-@app.get("/particles/{pid}", response_model=Particle)
-def get_particle(pid: int, user: str = Depends(get_current_user)):
+# Application info endpoint
+@app.get("/info", tags=["System"])
+async def app_info() -> Dict[str, Any]:
     """
-    Retrieve a specific particle by ID for the authenticated user.
+    Application information endpoint.
     
-    Args:
-        pid: Particle ID to retrieve
-        user: Current authenticated user (injected by dependency)
-        
     Returns:
-        Particle: The requested particle
-        
-    Raises:
-        HTTPException: 404 if particle doesn't exist or doesn't belong to user
-        
-    Note:
-        User isolation is enforced - users can only access their own particles.
+        Dict[str, Any]: Application metadata
     """
-    db = get_db()
-    cur = db.execute("SELECT * FROM particles WHERE id=? AND user=?", (pid, user))
-    row = cur.fetchone()
-    if not row:
-        raise HTTPException(status_code=404, detail="Not found")
-    data = dict(row)
-    data["tags"] = row["tags"].split(",") if row["tags"] else []
-    return Particle(**data)
+    return {
+        "name": settings.app_name,
+        "version": settings.version,
+        "environment": "development" if settings.debug else "production",
+        "features": [
+            "User Authentication",
+            "PARA Method Organization",
+            "Full-Text Search",
+            "Markdown Support",
+            "Tag System",
+            "RESTful API"
+        ]
+    }
 
-@app.post("/particles", response_model=Particle)
-def create_particle(p: Particle, user: str = Depends(get_current_user)):
-    """
-    Create a new particle for the authenticated user.
+
+# Import time for middleware
+import time
+
+if __name__ == "__main__":
+    import uvicorn
     
-    Args:
-        p: Particle data (id, created, user fields are ignored)
-        user: Current authenticated user (injected by dependency)
-        
-    Returns:
-        Particle: The newly created particle with generated ID and timestamp
-        
-    Note:
-        - Auto-generates ID and creation timestamp
-        - Defaults to "Projects" section if not specified
-        - Tags list is converted to comma-separated string for storage
-        - Returns the complete particle by fetching it from database
-    """
-    db = get_db()
-    tags = p.tags if p.tags is not None else []
-    section = p.section if p.section else "Projects"
-    cur = db.execute(
-        "INSERT INTO particles (title, content, tags, section, user, created) VALUES (?, ?, ?, ?, ?, datetime('now'))",
-        (p.title, p.content, ",".join(tags), section, user)
+    logger.info("Starting development server...")
+    uvicorn.run(
+        "main:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=settings.debug,
+        log_level="debug" if settings.debug else "info"
     )
-    db.commit()
-    pid = cur.lastrowid
-    return get_particle(pid, user)
-
-@app.put("/particles/{pid}", response_model=Particle)
-def update_particle(pid: int, p: Particle, user: str = Depends(get_current_user)):
-    """
-    Update an existing particle for the authenticated user.
-    
-    Args:
-        pid: ID of the particle to update
-        p: Updated particle data
-        user: Current authenticated user (injected by dependency)
-        
-    Returns:
-        Particle: The updated particle
-        
-    Note:
-        - User isolation enforced via WHERE clause
-        - Tags list converted to comma-separated string for storage
-        - Returns updated particle by fetching from database
-        - No error if particle doesn't exist (SQL UPDATE affects 0 rows)
-    """
-    db = get_db()
-    db.execute(
-        "UPDATE particles SET title=?, content=?, tags=?, section=? WHERE id=? AND user=?",
-        (p.title, p.content, ",".join(p.tags), p.section, pid, user)
-    )
-    db.commit()
-    return get_particle(pid, user)
-
-@app.delete("/particles/{pid}")
-def delete_particle(pid: int, user: str = Depends(get_current_user)):
-    """
-    Delete a particle for the authenticated user.
-    
-    Args:
-        pid: ID of the particle to delete
-        user: Current authenticated user (injected by dependency)
-        
-    Returns:
-        dict: Success message
-        
-    Note:
-        - User isolation enforced via WHERE clause
-        - No error if particle doesn't exist (SQL DELETE affects 0 rows)
-        - Permanent deletion - no soft delete or archive functionality
-    """
-    db = get_db()
-    db.execute("DELETE FROM particles WHERE id=? AND user=?", (pid, user))
-    db.commit()
-    return {"msg": "Deleted"}
-
-# DB Init
-@app.on_event("startup")
-def init_db():
-    """
-    Initialize SQLite database schema on application startup.
-    
-    Creates two tables if they don't exist:
-    1. users: Stores user credentials with bcrypt-hashed passwords
-    2. particles: Stores knowledge particles with foreign key to users
-    
-    Note:
-        - Uses CREATE TABLE IF NOT EXISTS for idempotency
-        - Foreign key constraint ensures data integrity
-        - Runs once when FastAPI application starts
-    """
-    db = get_db()
-    db.execute("""
-    CREATE TABLE IF NOT EXISTS users (
-        username TEXT PRIMARY KEY,
-        password TEXT NOT NULL
-    )
-    """)
-    db.execute("""
-    CREATE TABLE IF NOT EXISTS particles (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT NOT NULL,
-        content TEXT NOT NULL,
-        tags TEXT,
-        section TEXT,
-        user TEXT,
-        created TEXT,
-        FOREIGN KEY(user) REFERENCES users(username)
-    )
-    """)
-    db.commit()
-

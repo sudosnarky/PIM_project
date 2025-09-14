@@ -1,37 +1,52 @@
-</div>
-<footer style="text-align:center;margin-top:2em;color:#888;font-size:0.95em;">
-	&copy; <a href="https://github.com/sudosnarky" target="_blank" style="color:#888;">@sudosnarky</a>
-</footer>
-<!DOCTYPE html><html lang="en">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PARA InfoSystem | Login</title>
-<link rel="icon" type="image/svg+xml" href="/static/assets/favicon.svg">
-<link rel="stylesheet" href="/static/css/styles.css">
-<script src="/static/js/app.js" defer></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PARA InfoSystem | Login</title>
+    <link rel="icon" type="image/svg+xml" href="/static/assets/favicon.svg">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="/static/js/module-loader.js"></script>
 </head>
-<body><div class="page-container">
-       <div class="login-container fade-in" id="login-box">
-	       <h1 style="margin-bottom:0.7em;">PARA InfoSystem</h1>
-	       <div style="text-align:center;margin-bottom:1.2em;">
-		       <a href="/static/html/help.html" class="btn btn-secondary" style="padding:0.5em 1.2em;">Help & FAQs</a>
-	       </div>
-		<div class="input-group"><input type="text" placeholder="Username" class="input-field" id="login-username"></div>
-		<div class="input-group"><input type="password" placeholder="Password" class="input-field" id="login-password"></div>
-		<button class="btn btn-primary" id="login-btn">Sign in</button>
-		<div style="margin-top:16px;text-align:center;">
-			<a href="#" id="show-register">Don't have an account? Register</a>
-		</div>
-	</div>
-       <div class="login-container fade-in" id="register-box" style="display:none;">
-	       <h1 style="margin-bottom:0.7em;">Register</h1>
-	       <div style="text-align:center;margin-bottom:1.2em;">
-		       <a href="/static/html/help.html" class="btn btn-secondary" style="padding:0.5em 1.2em;">Help & FAQs</a>
-	       </div>
-		<div class="input-group"><input type="text" placeholder="Username" class="input-field" id="register-username"></div>
-		<div class="input-group"><input type="password" placeholder="Password" class="input-field" id="register-password"></div>
-		<button class="btn btn-primary" id="register-btn">Register</button>
-		<div style="margin-top:16px;text-align:center;">
-			<a href="#" id="show-login">Already have an account? Login</a>
-		</div>
-	</div>
-</div></body></html>
+<body>
+    <div class="page-container">
+        <div class="login-container fade-in" id="login-box">
+            <h1 style="margin-bottom:0.7em;">PARA InfoSystem</h1>
+            <div style="text-align:center;margin-bottom:1.2em;">
+                <a href="/static/html/help.html" class="btn btn-secondary" style="padding:0.5em 1.2em;">Help & FAQs</a>
+            </div>
+            <div class="input-group">
+                <input type="text" placeholder="Username" class="input-field" id="login-username">
+            </div>
+            <div class="input-group">
+                <input type="password" placeholder="Password" class="input-field" id="login-password">
+            </div>
+            <button class="btn btn-primary" id="login-btn">Sign in</button>
+            <div style="margin-top:16px;text-align:center;">
+                <a href="#" id="show-register">Don't have an account? Register</a>
+            </div>
+        </div>
+        
+        <div class="login-container fade-in" id="register-box" style="display:none;">
+            <h1 style="margin-bottom:0.7em;">Register</h1>
+            <div style="text-align:center;margin-bottom:1.2em;">
+                <a href="/static/html/help.html" class="btn btn-secondary" style="padding:0.5em 1.2em;">Help & FAQs</a>
+            </div>
+            <div class="input-group">
+                <input type="text" placeholder="Username" class="input-field" id="register-username">
+            </div>
+            <div class="input-group">
+                <input type="password" placeholder="Password" class="input-field" id="register-password">
+            </div>
+            <button class="btn btn-primary" id="register-btn">Register</button>
+            <div style="margin-top:16px;text-align:center;">
+                <a href="#" id="show-login">Already have an account? Login</a>
+            </div>
+        </div>
+    </div>
+    
+    <footer style="text-align:center;margin-top:2em;color:#888;font-size:0.95em;">
+        &copy; <a href="https://github.com/sudosnarky" target="_blank" style="color:#888;">@sudosnarky</a>
+    </footer>
+</body>
+</html>
