@@ -126,7 +126,22 @@ class DashboardController {
       );
     } catch (err) {
       console.error('Failed to fetch particles:', err);
-      alert('Failed to load notes: ' + err.message);
+      
+      // Provide more specific error messaging
+      let errorMessage = 'Failed to load your notes. Please try refreshing the page.';
+      if (err.message.includes('401') || err.message.includes('unauthorized')) {
+        errorMessage = 'Your session has expired. Please log in again.';
+        window.AuthManager.logout();
+        return;
+      } else if (err.message.includes('network') || err.message.includes('fetch')) {
+        errorMessage = 'Network error while loading notes. Please check your connection and try again.';
+      } else if (err.message.includes('timeout')) {
+        errorMessage = 'Request timed out while loading notes. Please try again.';
+      } else if (err.message) {
+        errorMessage = 'Failed to load notes: ' + err.message;
+      }
+      
+      alert(errorMessage);
       this.particles = [];
     }
   }

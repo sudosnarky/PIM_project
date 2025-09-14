@@ -69,13 +69,16 @@ class UserService:
                 "success": True
             }
                 
-        except sqlite3.IntegrityError:
-            raise ServiceError("Username already exists")
+        except sqlite3.IntegrityError as e:
+            error_msg = f"Username '{user_data.username}' already exists. Please choose a different username."
+            logger.warning(f"User registration failed - duplicate username: {user_data.username}")
+            raise ServiceError(error_msg)
         except AuthenticationError as e:
-            raise ServiceError(str(e))
+            logger.warning(f"Authentication error during user creation for {user_data.username}: {e}")
+            raise ServiceError(f"Password validation failed: {str(e)}")
         except DatabaseError as e:
             logger.error(f"Database error creating user {user_data.username}: {e}")
-            raise ServiceError("Failed to create user account")
+            raise ServiceError(f"Failed to create user account due to database error. Please try again later. (Error: {type(e).__name__})")
     
     def authenticate_user(self, username: str, password: str) -> Optional[Dict[str, Any]]:
         """
@@ -200,7 +203,7 @@ class ParticleService:
                 
         except DatabaseError as e:
             logger.error(f"Database error creating particle for {username}: {e}")
-            raise ServiceError("Failed to create particle")
+            raise ServiceError(f"Failed to create particle due to database error. Please check your data and try again. (Error: {type(e).__name__}: {str(e)[:100]})")
     
     def get_particle_by_id(self, particle_id: int, username: str) -> ParticleResponse:
         """
@@ -227,7 +230,9 @@ class ParticleService:
             )
             
             if not particles:
-                raise ServiceError("Particle not found or access denied")
+                error_msg = f"Particle with ID {particle_id} not found or you don't have access to it. Please check the particle ID and ensure you own this particle."
+                logger.warning(f"Particle access denied or not found: ID {particle_id}, user {username}")
+                raise ServiceError(error_msg)
             
             particle = particles[0]
             
@@ -244,7 +249,7 @@ class ParticleService:
                 
         except DatabaseError as e:
             logger.error(f"Database error fetching particle {particle_id} for {username}: {e}")
-            raise ServiceError("Failed to fetch particle")
+            raise ServiceError(f"Failed to fetch particle ID {particle_id}. Database error: {type(e).__name__}. Please try again or contact support if the issue persists.")
     
     def list_particles(
         self, 
@@ -377,18 +382,18 @@ class ParticleService:
                 db.commit()
                 
                 if cursor.rowcount == 0:
-                    raise ServiceError("Particle not found or access denied")
+                    error_msg = f"Particle with ID {particle_id} not found or you don't have permission to update it. Please verify the particle exists and belongs to your account."
+                    logger.warning(f"Update failed - particle not found or access denied: ID {particle_id}, user {username}")
+                    raise ServiceError(error_msg)
                 
                 logger.info(f"Updated particle {particle_id} for user {username}")
                 return self.get_particle_by_id(particle_id, username)
                 
         except ServiceError:
             raise
-        except ServiceError:
-            raise
         except DatabaseError as e:
             logger.error(f"Database error updating particle {particle_id} for {username}: {e}")
-            raise ServiceError("Failed to update particle")
+            raise ServiceError(f"Failed to update particle ID {particle_id} due to database error: {type(e).__name__}. Please check your data format and try again.")
     
     def delete_particle(self, particle_id: int, username: str) -> bool:
         """
@@ -416,7 +421,9 @@ class ParticleService:
                 db.commit()
                 
                 if cursor.rowcount == 0:
-                    raise ServiceError("Particle not found or access denied")
+                    error_msg = f"Particle with ID {particle_id} not found or you don't have permission to delete it. Please verify the particle exists and belongs to your account."
+                    logger.warning(f"Delete failed - particle not found or access denied: ID {particle_id}, user {username}")
+                    raise ServiceError(error_msg)
                 
                 logger.info(f"Deleted particle {particle_id} for user {username}")
                 return True
@@ -425,7 +432,7 @@ class ParticleService:
             raise
         except DatabaseError as e:
             logger.error(f"Database error deleting particle {particle_id} for {username}: {e}")
-            raise ServiceError("Failed to delete particle")
+            raise ServiceError(f"Failed to delete particle ID {particle_id} due to database error: {type(e).__name__}. The particle may still exist. Please try again.")
     
     def get_particle_stats(self, username: str) -> Dict[str, int]:
         """

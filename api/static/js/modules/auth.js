@@ -97,7 +97,19 @@ class AuthManager {
    */
   requireAuth() {
     if (!this.isAuthenticated()) {
-      alert('Please log in to access this page.');
+      const isTokenExpired = this.isTokenExpired();
+      const hasToken = this.getToken();
+      
+      let message = 'Please log in to access this page.';
+      if (hasToken && isTokenExpired) {
+        message = 'Your session has expired. Please log in again to continue.';
+        this.clearToken();
+        this.clearUser();
+      } else if (!hasToken) {
+        message = 'Access denied. Please log in to view this page.';
+      }
+      
+      alert(message);
       window.location.href = 'index.html';
       return false;
     }

@@ -119,7 +119,7 @@ class DatabaseManager:
             
         except sqlite3.Error as e:
             logger.error(f"Database connection failed: {e}")
-            raise DatabaseError(f"Failed to connect to database: {e}")
+            raise DatabaseError(f"Failed to connect to database '{self.db_path}'. Error: {type(e).__name__}: {str(e)}. Please check file permissions and disk space.")
     
     @contextmanager
     def get_db_session(self) -> Generator[sqlite3.Connection, None, None]:
@@ -147,7 +147,7 @@ class DatabaseManager:
                 except Exception as e:
                     connection.rollback()
                     logger.error(f"Database session error: {e}")
-                    raise DatabaseError(f"Database operation failed: {e}")
+                    raise DatabaseError(f"Database operation failed during transaction. Error: {type(e).__name__}: {str(e)}. Transaction has been rolled back.")
                     
         except sqlite3.OperationalError as e:
             logger.error(f"Database operational error: {e}")
@@ -157,7 +157,7 @@ class DatabaseManager:
             raise e
         except sqlite3.Error as e:
             logger.error(f"Database session creation failed: {e}")
-            raise DatabaseError(f"Failed to create database session: {e}")
+            raise DatabaseError(f"Failed to create database session. Error: {type(e).__name__}: {str(e)}. Please check database file and permissions.")
 
     def initialize_schema(self) -> None:
         """
@@ -235,7 +235,7 @@ class DatabaseManager:
                 
         except sqlite3.Error as e:
             logger.error(f"Schema initialization failed: {e}")
-            raise DatabaseError(f"Failed to initialize database schema: {e}")
+            raise DatabaseError(f"Failed to initialize database schema. Error: {type(e).__name__}: {str(e)}. Please check database permissions and ensure the database file is not corrupted.")
 
     def health_check(self) -> dict:
         """

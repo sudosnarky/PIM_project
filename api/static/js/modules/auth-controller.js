@@ -159,7 +159,20 @@ class AuthController {
       }
     } catch (err) {
       console.error('Login failed:', err);
-      alert('Login failed: ' + err.message);
+      
+      // Provide more specific error messaging
+      let errorMessage = 'Login failed. Please check your credentials and try again.';
+      if (err.message.includes('401') || err.message.includes('Unauthorized')) {
+        errorMessage = 'Invalid username or password. Please double-check your credentials.';
+      } else if (err.message.includes('network') || err.message.includes('fetch')) {
+        errorMessage = 'Network error. Please check your internet connection and try again.';
+      } else if (err.message.includes('timeout')) {
+        errorMessage = 'Login request timed out. Please try again.';
+      } else if (err.message) {
+        errorMessage = 'Login failed: ' + err.message;
+      }
+      
+      alert(errorMessage);
       
       // Clear password field on failure
       this.loginPassword.value = '';
@@ -209,7 +222,22 @@ class AuthController {
       window.location.href = 'onboarding.html';
     } catch (err) {
       console.error('Registration failed:', err);
-      alert('Registration failed: ' + err.message);
+      
+      // Provide specific error messaging for registration
+      let errorMessage = 'Registration failed. Please try again.';
+      if (err.message.includes('Username already exists') || err.message.includes('already taken')) {
+        errorMessage = 'This username is already taken. Please choose a different username.';
+      } else if (err.message.includes('password') && err.message.includes('validation')) {
+        errorMessage = 'Password does not meet security requirements. Please choose a stronger password.';
+      } else if (err.message.includes('400') || err.message.includes('Bad Request')) {
+        errorMessage = 'Invalid registration data. Please check your input and try again.';
+      } else if (err.message.includes('network') || err.message.includes('fetch')) {
+        errorMessage = 'Network error. Please check your internet connection and try again.';
+      } else if (err.message) {
+        errorMessage = 'Registration failed: ' + err.message;
+      }
+      
+      alert(errorMessage);
       
       // Clear password field on failure
       this.registerPassword.value = '';

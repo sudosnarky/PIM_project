@@ -56,21 +56,22 @@ class ApiService {
     if (res.status === 401) {
       window.AuthManager.clearToken();
       window.AuthManager.clearUser();
-      alert('Session expired. Please log in again.');
+      alert('Your session has expired or is invalid. Please log in again to continue.');
       window.location.href = 'index.html';
-      throw new Error('Unauthorized');
+      throw new Error('Authentication failed: Token expired or invalid');
     }
     
     // Handle other HTTP errors
     if (!res.ok) {
-      let msg = 'API error';
+      let msg = `Request failed with status ${res.status}`;
       try { 
         const errorData = await res.json();
-        msg = errorData.detail || msg; 
+        msg = errorData.detail || `Server error: ${res.status} ${res.statusText}`; 
       } catch (parseError) {
-        // If we can't parse the error response, use generic message
+        // If we can't parse the error response, provide more detail
+        msg = `Network error: ${res.status} ${res.statusText}. Unable to parse error response.`;
       }
-      throw new Error(`${msg} (Status: ${res.status})`);
+      throw new Error(`API Error: ${msg}`);
     }
     
     // Parse and return successful response as JSON
@@ -90,7 +91,16 @@ class ApiService {
       body: form 
     });
     
-    if (!res.ok) throw new Error('Login failed');
+    if (!res.ok) {
+      let errorMsg = 'Login failed';
+      try {
+        const errorData = await res.json();
+        errorMsg = errorData.detail || `Login failed with status ${res.status}`;
+      } catch (e) {
+        errorMsg = `Login failed: ${res.status} ${res.statusText}`;
+      }
+      throw new Error(errorMsg);
+    }
     
     const data = await res.json();
     window.AuthManager.setToken(data.access_token);
@@ -100,10 +110,20 @@ class ApiService {
   }
 
   async register(username, password) {
-    return this.fetch('/register', {
-      method: 'POST',
-      body: { username, password }
-    });
+    try {
+      return await this.fetch('/users/register', {
+        method: 'POST',
+        body: { username, password }
+      });
+    } catch (err) {
+      // Enhance error message for registration failures
+      if (err.message.includes('400')) {
+        throw new Error('Registration failed: Invalid username or password format');
+      } else if (err.message.includes('409') || err.message.includes('conflict')) {
+        throw new Error('Username already exists');
+      }
+      throw err;
+    }
   }
 
   async logout() {
