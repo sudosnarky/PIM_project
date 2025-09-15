@@ -1,0 +1,50 @@
+[
+  {
+    "title": "Project Planning Meeting Notes",
+    "content": "## Meeting Agenda\n\n- Project timeline review\n- Resource allocation\n- Risk assessment\n- Next steps\n\n### Key Decisions\n\n1. Move deadline to end of month\n2. Assign additional developer\n3. Weekly check-ins on Fridays",
+    "category": "Projects",
+    "tags": ["meeting", "planning", "project-management"],
+    "created_at": "2024-01-15T10:00:00Z",
+    "updated_at": "2024-01-15T10:30:00Z"
+  },
+  {
+    "title": "Team Building Activities", 
+    "content": "Ideas for improving team collaboration and morale:\n\n- Monthly team lunches\n- Quarterly off-site events\n- Skill-sharing sessions\n- Recognition program\n\nBudget: $5000 per quarter",
+    "category": "Areas",
+    "tags": ["team", "management", "culture"],
+    "created_at": "2024-01-16T14:00:00Z",
+    "updated_at": "2024-01-16T14:15:00Z"
+  },
+  {
+    "title": "React Best Practices Reference",
+    "content": "# React Development Guidelines\n\n## Component Structure\n\n- Use functional components with hooks\n- Keep components small and focused\n- Use TypeScript for type safety\n\n## State Management\n\n- Local state for component-specific data\n- Context for shared state\n- Redux for complex state logic\n\n## Testing\n\n- Unit tests for all components\n- Integration tests for user flows",
+    "category": "Resources", 
+    "tags": ["react", "javascript", "development", "reference"],
+    "created_at": "2024-01-17T09:00:00Z",
+    "updated_at": "2024-01-20T16:00:00Z"
+  },
+  {
+    "title": "Old Project Documentation",
+    "content": "Legacy system documentation from 2022 project. Keeping for reference but no longer actively maintained.\n\nIncludes:\n- API specifications\n- Database schema\n- Deployment procedures\n- Known issues and workarounds",
+    "category": "Archives",
+    "tags": ["legacy", "documentation", "reference"],
+    "created_at": "2022-06-01T12:00:00Z", 
+    "updated_at": "2024-01-10T09:00:00Z"
+  },
+  {
+    "title": "Website Redesign Project",
+    "content": "## Objective\nModernize company website with improved UX and mobile responsiveness.\n\n## Timeline\n- Design phase: 2 weeks\n- Development: 4 weeks  \n- Testing: 1 week\n- Launch: End of month\n\n## Requirements\n- Mobile-first design\n- Accessibility compliance\n- SEO optimization\n- Performance optimization",
+    "category": "Projects",
+    "tags": ["website", "redesign", "ux", "mobile"],
+    "created_at": "2024-01-18T11:00:00Z",
+    "updated_at": "2024-01-18T11:45:00Z"
+  },
+  {
+    "title": "Customer Support Workflow",
+    "content": "Standard operating procedure for handling customer inquiries:\n\n1. **Initial Response** (within 2 hours)\n   - Acknowledge receipt\n   - Gather additional information if needed\n   - Set expectations\n\n2. **Investigation** (within 24 hours)\n   - Research issue\n   - Consult with technical team if needed\n   - Document findings\n\n3. **Resolution** (within 48 hours)\n   - Provide solution or workaround\n   - Follow up to ensure satisfaction\n   - Update knowledge base",
+    "category": "Areas",
+    "tags": ["customer-support", "workflow", "process"],
+    "created_at": "2024-01-19T13:00:00Z",
+    "updated_at": "2024-01-19T13:30:00Z"
+  }
+]

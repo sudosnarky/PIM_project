@@ -15,11 +15,12 @@
             <div style="text-align:center;margin-bottom:1.2em;">
                 <a href="/static/html/help.html" class="btn btn-secondary" style="padding:0.5em 1.2em;">Help & FAQs</a>
             </div>
+            <div id="login-error" class="error" style="display:none;color:red;margin-bottom:1em;text-align:center;"></div>
             <div class="input-group">
-                <input type="text" placeholder="Username" class="input-field" id="login-username">
+                <input type="text" placeholder="Username" class="input-field" id="login-username" required>
             </div>
             <div class="input-group">
-                <input type="password" placeholder="Password" class="input-field" id="login-password">
+                <input type="password" placeholder="Password" class="input-field" id="login-password" required minlength="6">
             </div>
             <button class="btn btn-primary" id="login-btn">Sign in</button>
             <div style="margin-top:16px;text-align:center;">
@@ -32,11 +33,12 @@
             <div style="text-align:center;margin-bottom:1.2em;">
                 <a href="/static/html/help.html" class="btn btn-secondary" style="padding:0.5em 1.2em;">Help & FAQs</a>
             </div>
+            <div id="register-error" class="error" style="display:none;color:red;margin-bottom:1em;text-align:center;"></div>
             <div class="input-group">
-                <input type="text" placeholder="Username" class="input-field" id="register-username">
+                <input type="text" placeholder="Username" class="input-field" id="register-username" required>
             </div>
             <div class="input-group">
-                <input type="password" placeholder="Password" class="input-field" id="register-password">
+                <input type="password" placeholder="Password" class="input-field" id="register-password" required minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" title="Password must be at least 8 characters with uppercase, lowercase, number, and special character">
             </div>
             <button class="btn btn-primary" id="register-btn">Register</button>
             <div style="margin-top:16px;text-align:center;">

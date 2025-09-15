@@ -8,6 +8,7 @@
  */
 class AuthController {
   constructor() {
+    console.log('AuthController constructor called');
     this.initializeElements();
     this.setupEventListeners();
     this.checkExistingSession();
@@ -37,23 +38,35 @@ class AuthController {
    * Set up all event listeners
    */
   setupEventListeners() {
-    // Toggle between login and register forms
-    if (this.showRegister && this.showLogin && this.loginBox && this.registerBox) {
+    console.log('Setting up event listeners');
+    console.log('Show register element:', this.showRegister);
+    console.log('Show login element:', this.showLogin);
+    console.log('Login button:', this.loginBtn);
+    console.log('Register button:', this.registerBtn);
+
+    // Toggle buttons
+    if (this.showRegister) {
       this.showRegister.onclick = (e) => {
         e.preventDefault();
+        console.log('Show register clicked');
         this.showRegistrationForm();
       };
-      
+    }
+
+    if (this.showLogin) {
       this.showLogin.onclick = (e) => {
         e.preventDefault();
+        console.log('Show login clicked');
         this.showLoginForm();
       };
     }
 
     // Login button
     if (this.loginBtn) {
+      console.log('Setting up login button click handler');
       this.loginBtn.onclick = (e) => {
         e.preventDefault();
+        console.log('Login button clicked, calling handleLogin...');
         this.handleLogin();
       };
     }
@@ -62,6 +75,7 @@ class AuthController {
     if (this.registerBtn) {
       this.registerBtn.onclick = (e) => {
         e.preventDefault();
+        console.log('Register button clicked, calling handleRegistration...');
         this.handleRegistration();
       };
     }
@@ -70,6 +84,7 @@ class AuthController {
     if (this.loginPassword) {
       this.loginPassword.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
+          console.log('Enter key pressed in login password field');
           this.handleLogin();
         }
       });
@@ -78,6 +93,7 @@ class AuthController {
     if (this.registerPassword) {
       this.registerPassword.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
+          console.log('Enter key pressed in register password field');
           this.handleRegistration();
         }
       });
@@ -98,7 +114,19 @@ class AuthController {
    * Show the registration form and hide the login form
    */
   showRegistrationForm() {
+    console.log('showRegistrationForm called');
+    console.log('loginBox:', this.loginBox);
+    console.log('registerBox:', this.registerBox);
+    
+    // Clear any existing error messages
+    const loginError = document.getElementById('login-error');
+    if (loginError) {
+      loginError.style.display = 'none';
+      loginError.textContent = '';
+    }
+    
     if (this.loginBox && this.registerBox) {
+      console.log('Hiding login box and showing register box');
       this.loginBox.style.display = 'none';
       this.registerBox.style.display = '';
       
@@ -106,6 +134,8 @@ class AuthController {
       if (this.registerUsername) {
         this.registerUsername.focus();
       }
+    } else {
+      console.error('Cannot toggle forms - missing elements');
     }
   }
 
@@ -113,7 +143,17 @@ class AuthController {
    * Show the login form and hide the registration form
    */
   showLoginForm() {
+    console.log('showLoginForm called');
+    
+    // Clear any existing error messages
+    const registerError = document.getElementById('register-error');
+    if (registerError) {
+      registerError.style.display = 'none';
+      registerError.textContent = '';
+    }
+    
     if (this.registerBox && this.loginBox) {
+      console.log('Hiding register box and showing login box');
       this.registerBox.style.display = 'none';
       this.loginBox.style.display = '';
       
@@ -121,6 +161,8 @@ class AuthController {
       if (this.loginUsername) {
         this.loginUsername.focus();
       }
+    } else {
+      console.error('Cannot toggle forms - missing elements');
     }
   }
 
@@ -128,18 +170,20 @@ class AuthController {
    * Handle login form submission
    */
   async handleLogin() {
-    if (!this.loginUsername || !this.loginPassword) return;
+    console.log('handleLogin: Starting login process');
+    if (!this.loginUsername || !this.loginPassword) {
+      console.error('Login form elements not found');
+      return;
+    }
     
     const username = this.loginUsername.value.trim();
     const password = this.loginPassword.value.trim();
+    
+    console.log('Login credentials - Username:', username, 'Password length:', password.length);
 
-    // Validate inputs
-    if (!window.SecurityUtils.validateUsername(username)) {
-      this.loginUsername.focus();
-      return;
-    }
-
-    if (!window.SecurityUtils.validatePassword(password)) {
+    // Basic validation only
+    if (!username || !password) {
+      console.log('Basic validation failed - empty fields');
       this.loginPassword.focus();
       return;
     }
@@ -148,17 +192,35 @@ class AuthController {
     this.setLoginFormEnabled(false);
 
     try {
-      await window.ApiService.login(username, password);
+      console.log('Calling ApiService.login with:', username);
+      const loginResult = await window.ApiService.login(username, password);
+      console.log('Login API call successful:', loginResult);
+      
+      // Store the authentication token
+      if (loginResult && loginResult.access_token) {
+        console.log('Storing authentication token');
+        window.AuthManager.setToken(loginResult.access_token);
+      } else {
+        console.error('Login response missing access_token:', loginResult);
+      }
       
       // Check if this is the user's first login
-      if (!localStorage.getItem('onboarded')) {
+      const isOnboarded = localStorage.getItem('onboarded');
+      console.log('Onboarded status:', isOnboarded);
+      
+      if (!isOnboarded) {
+        console.log('User not onboarded, setting flag and redirecting to onboarding');
         localStorage.setItem('onboarded', '1');
         window.location.href = 'onboarding.html';
       } else {
+        console.log('User onboarded, redirecting to dashboard');
         window.location.href = 'dashboard.html';
       }
     } catch (err) {
-      console.error('Login failed:', err);
+      console.error('Login API call failed:', err);
+      console.error('Error type:', typeof err);
+      console.error('Error message:', err.message);
+      console.error('Error stack:', err.stack);
       
       // Provide more specific error messaging
       let errorMessage = 'Login failed. Please check your credentials and try again.';
@@ -172,7 +234,14 @@ class AuthController {
         errorMessage = 'Login failed: ' + err.message;
       }
       
-      alert(errorMessage);
+      // Show error in the error div instead of alert
+      const errorDiv = document.getElementById('login-error');
+      if (errorDiv) {
+        errorDiv.textContent = errorMessage;
+        errorDiv.style.display = 'block';
+      } else {
+        alert(errorMessage);
+      }
       
       // Clear password field on failure
       this.loginPassword.value = '';
@@ -225,7 +294,11 @@ class AuthController {
       
       // Provide specific error messaging for registration
       let errorMessage = 'Registration failed. Please try again.';
-      if (err.message.includes('Username already exists') || err.message.includes('already taken')) {
+      
+      // Try to parse error response for better messaging
+      if (err.message.includes('422')) {
+        errorMessage = 'This username is already taken. Please choose a different username.';
+      } else if (err.message.includes('Username already exists') || err.message.includes('already taken')) {
         errorMessage = 'This username is already taken. Please choose a different username.';
       } else if (err.message.includes('password') && err.message.includes('validation')) {
         errorMessage = 'Password does not meet security requirements. Please choose a stronger password.';
@@ -237,7 +310,14 @@ class AuthController {
         errorMessage = 'Registration failed: ' + err.message;
       }
       
-      alert(errorMessage);
+      // Show error in the error div instead of alert
+      const errorDiv = document.getElementById('register-error');
+      if (errorDiv) {
+        errorDiv.textContent = errorMessage;
+        errorDiv.style.display = 'block';
+      } else {
+        alert(errorMessage);
+      }
       
       // Clear password field on failure
       this.registerPassword.value = '';
@@ -318,8 +398,25 @@ class AuthController {
 }
 
 // Initialize auth controller when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-  if (location.pathname.endsWith('index.html')) {
+function initAuthController() {
+  console.log('DOM loaded, checking for login page elements...');
+  console.log('Current pathname:', location.pathname);
+  console.log('login-box element:', document.getElementById('login-box'));
+  console.log('register-box element:', document.getElementById('register-box'));
+  
+  // Check if we're on the login page by looking for the login elements
+  if (document.getElementById('login-box') || document.getElementById('register-box')) {
+    console.log('Initializing AuthController on login page');
     window.authController = new AuthController();
+  } else {
+    console.log('Not on login page, AuthController not initialized');
   }
-});
+}
+
+// Handle both cases: DOM already loaded or still loading
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initAuthController);
+} else {
+  // DOM already loaded
+  initAuthController();
+}

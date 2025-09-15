@@ -1,0 +1,36 @@
+{
+  "name": "pim-e2e-tests",
+  "version": "1.0.0",
+  "description": "End-to-end tests for the PARA InfoSystem using Playwright",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "test:auth": "playwright test tests/auth.spec.js",
+    "test:dashboard": "playwright test tests/dashboard.spec.js",
+    "test:crud": "playwright test tests/crud.spec.js",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:regression": "playwright test --grep @regression",
+    "install": "playwright install",
+    "report": "playwright show-report",
+    "trace": "playwright show-trace"
+  },
+  "keywords": [
+    "playwright",
+    "e2e",
+    "testing",
+    "pim",
+    "para",
+    "fastapi"
+  ],
+  "author": "PIM Development Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1"
+  }
+}

@@ -16,18 +16,31 @@
 			</div>
 			<div class="article-container">
 				<div class="article-header">
-					<input type="text" class="input-field" placeholder="Title" value="">
+					<input type="text" id="title" name="title" class="input-field title-input" placeholder="Title" value="" required>
 				</div>
-				<textarea class="input-field markdown-editor" rows="20"></textarea>
+				
+				<!-- Category Selection -->
+				<div style="margin-bottom: var(--space-md);">
+					<label for="category">PARA Category:</label>
+					<select id="category" name="category" class="input-field category-select" required>
+						<option value="Projects">Projects</option>
+						<option value="Areas">Areas</option>
+						<option value="Resources">Resources</option>
+						<option value="Archives">Archives</option>
+					</select>
+				</div>
+				
+				<textarea id="content" name="content" class="input-field content-editor markdown-editor editor" rows="20" placeholder="Write your content here..." required></textarea>
+				
 				<div style="margin-top: var(--space-md);">
 					<h3>Tags</h3>
 					<div class="input-group">
-						<input type="text" class="input-field" placeholder="Add tags separated by commas" value="">
+						<input type="text" id="tags" name="tags" class="input-field" placeholder="Add tags separated by commas" value="">
 					</div>
 				</div>
 			</div>
 			<div style="display: flex; justify-content: flex-end; gap: var(--space-sm); margin-top: var(--space-lg);">
-				<button class="btn btn-primary" type="button">Save Changes</button>
+				<button id="save-btn" class="btn btn-primary save-button" type="submit">Save Changes</button>
 				<button class="btn" type="button" onclick="window.location.href='dashboard.html'">Cancel</button>
 			</div>
 		</div>

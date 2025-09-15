@@ -10,8 +10,10 @@ class ApiService {
   constructor() {
     // Dynamically determine API base URL
     this.baseUrl = window.location.hostname.includes('render.com') 
-      ? 'https://pim-project-qgyu.onrender.com'
-      : window.location.origin.replace(/\/static.*/, '');
+      ? 'https://pim-project-qgyu.onrender.com/api/v1'
+      : window.location.origin + '/api/v1';
+    
+    console.log('API baseUrl set to:', this.baseUrl);
   }
 
   /**
@@ -81,48 +83,57 @@ class ApiService {
   /**
    * User authentication methods
    */
-  async login(username, password) {
-    const form = new FormData();
-    form.append('username', username);
-    form.append('password', password);
+  async login(email, password) {
+    console.log('ApiService.login called with:', email);
+    console.log('Using baseUrl:', this.baseUrl);
     
-    const res = await fetch(this.baseUrl + '/token', { 
-      method: 'POST', 
-      body: form 
+    const response = await fetch(`${this.baseUrl}/auth/token`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        username: email,
+        password: password,
+      }),
     });
     
-    if (!res.ok) {
-      let errorMsg = 'Login failed';
-      try {
-        const errorData = await res.json();
-        errorMsg = errorData.detail || `Login failed with status ${res.status}`;
-      } catch (e) {
-        errorMsg = `Login failed: ${res.status} ${res.statusText}`;
-      }
-      throw new Error(errorMsg);
+    console.log('Login API response status:', response.status);
+    console.log('Login API response headers:', Object.fromEntries(response.headers.entries()));
+    
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Login successful, token received:', !!data.access_token);
+      return data;
+    } else {
+      const errorText = await response.text();
+      console.error('Login failed - Status:', response.status, 'Error:', errorText);
+      throw new Error(`Login failed: ${response.status} - ${errorText}`);
     }
-    
-    const data = await res.json();
-    window.AuthManager.setToken(data.access_token);
-    window.AuthManager.setUser(username);
-    
-    return data;
   }
 
-  async register(username, password) {
-    try {
-      return await this.fetch('/users/register', {
-        method: 'POST',
-        body: { username, password }
-      });
-    } catch (err) {
-      // Enhance error message for registration failures
-      if (err.message.includes('400')) {
-        throw new Error('Registration failed: Invalid username or password format');
-      } else if (err.message.includes('409') || err.message.includes('conflict')) {
-        throw new Error('Username already exists');
-      }
-      throw err;
+  async register(email, password) {
+    const response = await fetch(`${this.baseUrl}/users/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    });
+    
+    console.log('Register API response status:', response.status);
+    
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Registration successful');
+      return data;
+    } else {
+      const errorText = await response.text();
+      console.error('Registration failed:', response.status, errorText);
+      throw new Error(`Registration failed: ${response.status}`);
     }
   }
 

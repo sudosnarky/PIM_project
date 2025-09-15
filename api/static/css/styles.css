@@ -130,6 +130,9 @@ textarea.input-field {
   font-size: 0.8rem;}
 .btn-edit {background: var(--btn-edit);color: white;padding: 6px 12px;
   font-size: 0.8rem;}
+.btn-danger, .delete-btn {background: #dc3545;color: white;padding: 6px 12px;
+  font-size: 0.8rem;}
+.btn-danger:hover, .delete-btn:hover {background: #c82333;}
 
 .tags-container {display: flex;flex-wrap: wrap;
   gap: var(--space-sm);margin-top: var(--space-lg);}
@@ -138,6 +141,34 @@ textarea.input-field {
   background: var(--tag-blue);
   border-radius: 15px;
   padding: 4px 12px;
+  color: white;
+  font-size: 0.8em;
+  font-weight: 500;
+}
+
+.note-meta {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+  margin-bottom: var(--space-md);
+  font-size: 0.9em;
+  color: var(--text-secondary);
+}
+
+.category-badge {
+  background: var(--btn-primary);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 0.8em;
+  font-weight: 500;
+}
+
+.date-created {
+  color: var(--text-secondary);
+}
+
+.tag {
   font-size: 0.8rem;
   font-weight: 500;
   display: inline-flex;
