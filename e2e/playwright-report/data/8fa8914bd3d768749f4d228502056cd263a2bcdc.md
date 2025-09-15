@@ -1,0 +1,140 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - heading "PARA InfoSystem Dashboard" [level=1] [ref=e4]
+      - generic [ref=e5]:
+        - button "Logout" [ref=e6] [cursor=pointer]
+        - link "Help & FAQs" [ref=e7] [cursor=pointer]:
+          - /url: /static/html/help.html
+    - generic [ref=e8]:
+      - generic [ref=e9] [cursor=pointer]: Projects
+      - generic [ref=e10] [cursor=pointer]: Areas
+      - generic [ref=e11] [cursor=pointer]: Resources
+      - generic [ref=e12] [cursor=pointer]: Archives
+  - contentinfo [ref=e13]:
+    - text: ©
+    - link "@sudosnarky" [ref=e14] [cursor=pointer]:
+      - /url: https://github.com/sudosnarky
+  - generic [ref=e15]:
+    - textbox "Search particles..." [ref=e16]
+    - button "Search" [ref=e17] [cursor=pointer]
+    - button "Create Particle" [ref=e18] [cursor=pointer]
+  - generic [ref=e19]:
+    - generic [ref=e20]:
+      - generic [ref=e21]:
+        - heading "Updated Task Management Ideas 1757941473914" [level=3] [ref=e22]
+        - paragraph [ref=e23]: "Updated: Meeting with team to discuss project progress and next steps."
+        - generic [ref=e24]:
+          - generic [ref=e25]: 9/15/2025
+          - generic [ref=e26]: Projects
+      - generic [ref=e27]:
+        - link "View" [ref=e28] [cursor=pointer]:
+          - /url: view.html?id=12
+        - link "Edit" [ref=e29] [cursor=pointer]:
+          - /url: edit.html?id=12
+        - combobox [ref=e30]:
+          - option "Move to..." [disabled] [selected]
+          - option "Projects"
+          - option "Areas"
+          - option "Resources"
+          - option "Archives"
+        - button "Archive" [ref=e31] [cursor=pointer]
+    - generic [ref=e32]:
+      - generic [ref=e33]:
+        - heading "Team Meeting Notes 1757941477908" [level=3] [ref=e34]
+        - paragraph [ref=e35]: This is a test note for validating the PARA system functionality.
+        - generic [ref=e36]:
+          - generic [ref=e37]: 9/15/2025
+          - generic [ref=e38]: Projects
+      - generic [ref=e39]:
+        - link "View" [ref=e40] [cursor=pointer]:
+          - /url: view.html?id=10
+        - link "Edit" [ref=e41] [cursor=pointer]:
+          - /url: edit.html?id=10
+        - combobox [ref=e42]:
+          - option "Move to..." [disabled] [selected]
+          - option "Projects"
+          - option "Areas"
+          - option "Resources"
+          - option "Archives"
+        - button "Archive" [ref=e43] [cursor=pointer]
+    - generic [ref=e44]:
+      - generic [ref=e45]:
+        - heading "Project Documentation Review 1757941471187" [level=3] [ref=e46]
+        - paragraph [ref=e47]: "### Research Summary Key findings from today's research session."
+        - generic [ref=e48]:
+          - generic [ref=e49]: 9/15/2025
+          - generic [ref=e50]: Projects
+      - generic [ref=e51]:
+        - link "View" [ref=e52] [cursor=pointer]:
+          - /url: view.html?id=9
+        - link "Edit" [ref=e53] [cursor=pointer]:
+          - /url: edit.html?id=9
+        - combobox [ref=e54]:
+          - option "Move to..." [disabled] [selected]
+          - option "Projects"
+          - option "Areas"
+          - option "Resources"
+          - option "Archives"
+        - button "Archive" [ref=e55] [cursor=pointer]
+    - generic [ref=e56]:
+      - generic [ref=e57]:
+        - heading "Special Characters Test" [level=3] [ref=e58]
+        - paragraph [ref=e59]: "Test with <script>alert(\"xss\")</script> & special chars: émojis 🚀 and symbols ±∞"
+        - generic [ref=e60]:
+          - generic [ref=e61]: 9/15/2025
+          - generic [ref=e62]: Projects
+      - generic [ref=e63]:
+        - link "View" [ref=e64] [cursor=pointer]:
+          - /url: view.html?id=7
+        - link "Edit" [ref=e65] [cursor=pointer]:
+          - /url: edit.html?id=7
+        - combobox [ref=e66]:
+          - option "Move to..." [disabled] [selected]
+          - option "Projects"
+          - option "Areas"
+          - option "Resources"
+          - option "Archives"
+        - button "Archive" [ref=e67] [cursor=pointer]
+    - generic [ref=e68]:
+      - generic [ref=e69]:
+        - heading "Updated Task Management Ideas 1757941435499" [level=3] [ref=e70]
+        - paragraph [ref=e71]: "Updated: ### Research Summary Key findings from today's research session."
+        - generic [ref=e72]:
+          - generic [ref=e73]: 9/15/2025
+          - generic [ref=e74]: Projects
+      - generic [ref=e75]:
+        - link "View" [ref=e76] [cursor=pointer]:
+          - /url: view.html?id=4
+        - link "Edit" [ref=e77] [cursor=pointer]:
+          - /url: edit.html?id=4
+        - combobox [ref=e78]:
+          - option "Move to..." [disabled] [selected]
+          - option "Projects"
+          - option "Areas"
+          - option "Resources"
+          - option "Archives"
+        - button "Archive" [ref=e79] [cursor=pointer]
+    - generic [ref=e80]:
+      - generic [ref=e81]:
+        - heading "Team Meeting Notes 1757941432665" [level=3] [ref=e82]
+        - paragraph [ref=e83]: "## Important Points - Point 1"
+        - generic [ref=e84]:
+          - generic [ref=e85]: 9/15/2025
+          - generic [ref=e86]: Projects
+      - generic [ref=e87]:
+        - link "View" [ref=e88] [cursor=pointer]:
+          - /url: view.html?id=3
+        - link "Edit" [ref=e89] [cursor=pointer]:
+          - /url: edit.html?id=3
+        - combobox [ref=e90]:
+          - option "Move to..." [disabled] [selected]
+          - option "Projects"
+          - option "Areas"
+          - option "Resources"
+          - option "Archives"
+        - button "Archive" [ref=e91] [cursor=pointer]
+```
