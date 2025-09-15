@@ -78,9 +78,19 @@ class AuthManager {
    * Clear all authentication data and redirect to login
    */
   logout() {
+    console.log('AuthManager.logout() called - clearing authentication...');
+    console.log('Current token before logout:', this.getToken());
+    console.log('Current user before logout:', this.getUser());
+    
     this.clearToken();
     this.clearUser();
-    window.location.href = 'index.html';
+    
+    console.log('Token after clearing:', this.getToken());
+    console.log('User after clearing:', this.getUser());
+    console.log('Authentication cleared, redirecting to login page...');
+    
+    // Force redirect to login page
+    window.location.replace('/static/html/index.html');
   }
 
   /**

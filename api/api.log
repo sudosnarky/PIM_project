@@ -3332,3 +3332,847 @@
 2025-09-15 10:03:13,746 - services - INFO - User authenticated successfully: testuser
 2025-09-15 10:03:13,747 - auth - INFO - Created token for user: testuser
 2025-09-15 10:03:13,747 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:08:20,124 - main - INFO - Starting PARA InfoSystem API...
+2025-09-15 10:08:20,126 - database - INFO - Database schema initialized successfully
+2025-09-15 10:08:20,126 - main - INFO - Database initialized successfully
+2025-09-15 10:08:20,127 - main - INFO - Application startup completed successfully
+2025-09-15 10:09:48,584 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:09:48,585 - auth - INFO - Created token for user: testuser
+2025-09-15 10:09:48,585 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:09:48,597 - main - WARNING - Validation error for http://localhost:8000/api/v1/users/register: [{'type': 'missing', 'loc': ('body', 'username'), 'msg': 'Field required', 'input': {'email': 'testuser', 'password': 'NfMxK99$qm^g'}}]
+2025-09-15 10:09:48,599 - main - WARNING - Validation error for http://localhost:8000/api/v1/users/register: [{'type': 'missing', 'loc': ('body', 'username'), 'msg': 'Field required', 'input': {'email': 'testuser_1757930986711_523', 'password': '2oygUP9d02Et'}}]
+2025-09-15 10:09:48,605 - services - WARNING - Authentication failed - user not found: nonexistent
+2025-09-15 10:09:48,605 - routes - WARNING - Failed login attempt for username: nonexistent
+2025-09-15 10:09:48,606 - main - WARNING - HTTP exception for http://localhost:8000/api/v1/auth/token: 401 - Incorrect username or password
+2025-09-15 10:09:48,955 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:09:48,955 - auth - INFO - Created token for user: testuser
+2025-09-15 10:09:48,955 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:09:49,274 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:09:49,274 - auth - INFO - Created token for user: testuser
+2025-09-15 10:09:49,274 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:09:50,540 - services - WARNING - Authentication failed - user not found: admin'; DROP TABLE users; --
+2025-09-15 10:09:50,541 - routes - WARNING - Failed login attempt for username: admin'; DROP TABLE users; --
+2025-09-15 10:09:50,541 - main - WARNING - HTTP exception for http://localhost:8000/api/v1/auth/token: 401 - Incorrect username or password
+2025-09-15 10:09:50,923 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:09:50,923 - auth - INFO - Created token for user: testuser
+2025-09-15 10:09:50,923 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:09:50,947 - services - WARNING - Authentication failed - user not found: <script>alert("XSS")</script>
+2025-09-15 10:09:50,947 - routes - WARNING - Failed login attempt for username: <script>alert("XSS")</script>
+2025-09-15 10:09:50,948 - main - WARNING - HTTP exception for http://localhost:8000/api/v1/auth/token: 401 - Incorrect username or password
+2025-09-15 10:09:52,112 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:09:52,113 - auth - INFO - Created token for user: testuser
+2025-09-15 10:09:52,113 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:09:52,418 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:09:52,419 - auth - INFO - Created token for user: testuser
+2025-09-15 10:09:52,419 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:09:52,732 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:09:52,733 - auth - INFO - Created token for user: testuser
+2025-09-15 10:09:52,733 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:09:53,082 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:09:53,083 - auth - INFO - Created token for user: testuser
+2025-09-15 10:09:53,083 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:09:55,463 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:09:55,464 - auth - INFO - Created token for user: testuser
+2025-09-15 10:09:55,464 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:09:55,817 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:09:55,817 - auth - INFO - Created token for user: testuser
+2025-09-15 10:09:55,817 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:09:56,150 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:09:56,151 - auth - INFO - Created token for user: testuser
+2025-09-15 10:09:56,151 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:09:56,508 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:09:56,508 - auth - INFO - Created token for user: testuser
+2025-09-15 10:09:56,508 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:09:56,834 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:09:56,834 - auth - INFO - Created token for user: testuser
+2025-09-15 10:09:56,834 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:09:58,557 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:09:58,558 - auth - INFO - Created token for user: testuser
+2025-09-15 10:09:58,558 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:09:58,884 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:09:58,885 - auth - INFO - Created token for user: testuser
+2025-09-15 10:09:58,885 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:09:59,178 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:09:59,178 - auth - INFO - Created token for user: testuser
+2025-09-15 10:09:59,179 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:09:59,505 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:09:59,505 - auth - INFO - Created token for user: testuser
+2025-09-15 10:09:59,505 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:00,589 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:00,589 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:00,589 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:01,099 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:01,100 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:01,100 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:02,248 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:02,249 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:02,249 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:02,583 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:02,583 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:02,583 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:04,106 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:04,106 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:04,107 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:04,455 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:04,456 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:04,456 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:04,772 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:04,773 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:04,773 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:05,089 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:05,089 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:05,089 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:05,402 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:05,403 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:05,403 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:07,634 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:07,634 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:07,635 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:07,962 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:07,962 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:07,962 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:08,261 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:08,262 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:08,262 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:08,556 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:08,557 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:08,557 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:10,356 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:10,357 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:10,357 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:10,749 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:10,749 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:10,749 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:11,072 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:11,072 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:11,073 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:11,399 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:11,399 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:11,399 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:11,726 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:11,727 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:11,727 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:13,343 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:13,344 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:13,344 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:14,246 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:14,247 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:14,247 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:16,124 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:16,125 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:16,125 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:19,848 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:19,849 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:19,850 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:23,862 - services - WARNING - Authentication failed - user not found: nonexistent
+2025-09-15 10:10:23,862 - routes - WARNING - Failed login attempt for username: nonexistent
+2025-09-15 10:10:23,862 - main - WARNING - HTTP exception for http://localhost:8000/api/v1/auth/token: 401 - Incorrect username or password
+2025-09-15 10:10:24,488 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:24,488 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:24,488 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:27,497 - services - WARNING - Authentication failed - user not found: <script>alert("XSS")</script>
+2025-09-15 10:10:27,498 - routes - WARNING - Failed login attempt for username: <script>alert("XSS")</script>
+2025-09-15 10:10:27,499 - main - WARNING - HTTP exception for http://localhost:8000/api/v1/auth/token: 401 - Incorrect username or password
+2025-09-15 10:10:28,420 - main - WARNING - Validation error for http://localhost:8000/api/v1/users/register: [{'type': 'missing', 'loc': ('body', 'username'), 'msg': 'Field required', 'input': {'email': 'testuser', 'password': 'Kquc#JCziPJ7'}}]
+2025-09-15 10:10:28,591 - services - WARNING - Authentication failed - user not found: admin'; DROP TABLE users; --
+2025-09-15 10:10:28,592 - routes - WARNING - Failed login attempt for username: admin'; DROP TABLE users; --
+2025-09-15 10:10:28,592 - main - WARNING - HTTP exception for http://localhost:8000/api/v1/auth/token: 401 - Incorrect username or password
+2025-09-15 10:10:34,269 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:34,269 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:34,270 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:34,886 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:34,886 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:34,886 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:34,906 - main - WARNING - Validation error for http://localhost:8000/api/v1/users/register: [{'type': 'missing', 'loc': ('body', 'username'), 'msg': 'Field required', 'input': {'email': 'testuser_1757931027657_772', 'password': 'QzNa1#zd3rfS'}}]
+2025-09-15 10:10:35,387 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:35,388 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:35,389 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:37,876 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:37,877 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:37,878 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:38,526 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:38,526 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:38,526 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:38,941 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:38,942 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:38,942 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:39,355 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:39,355 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:39,355 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:41,349 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:41,351 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:41,352 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:41,942 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:41,943 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:41,943 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:42,395 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:42,396 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:42,396 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:45,363 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:45,364 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:45,365 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:45,934 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:45,934 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:45,935 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:46,344 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:46,345 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:46,345 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:46,725 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:46,726 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:46,726 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:48,844 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:48,844 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:48,844 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:49,470 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:49,470 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:49,471 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:51,789 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:51,790 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:51,790 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:53,658 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:53,659 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:53,659 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:54,549 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:54,550 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:54,550 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:57,259 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:57,264 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:57,264 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:57,935 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:57,935 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:57,935 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:58,389 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:58,390 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:58,390 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:10:58,751 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:10:58,752 - auth - INFO - Created token for user: testuser
+2025-09-15 10:10:58,752 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:02,005 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:02,006 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:02,006 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:02,659 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:02,660 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:02,660 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:03,097 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:03,098 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:03,098 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:03,473 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:03,474 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:03,474 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:03,831 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:03,832 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:03,832 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:04,200 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:04,201 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:04,201 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:07,350 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:07,350 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:07,350 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:07,922 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:07,922 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:07,923 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:08,374 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:08,374 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:08,375 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:08,860 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:08,860 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:08,861 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:11,335 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:11,336 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:11,336 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:15,267 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:15,268 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:15,268 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:16,709 - services - WARNING - Authentication failed - user not found: nonexistent
+2025-09-15 10:11:16,710 - routes - WARNING - Failed login attempt for username: nonexistent
+2025-09-15 10:11:16,710 - main - WARNING - HTTP exception for http://localhost:8000/api/v1/auth/token: 401 - Incorrect username or password
+2025-09-15 10:11:17,277 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:17,278 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:17,278 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:17,882 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:17,882 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:17,883 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:19,458 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:19,459 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:19,459 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:21,458 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:21,458 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:21,458 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:22,215 - main - WARNING - Validation error for http://localhost:8000/api/v1/users/register: [{'type': 'missing', 'loc': ('body', 'username'), 'msg': 'Field required', 'input': {'email': 'testuser_1757931077480_400', 'password': 'ThJPjS!CONbN'}}]
+2025-09-15 10:11:22,735 - main - WARNING - Validation error for http://localhost:8000/api/v1/users/register: [{'type': 'missing', 'loc': ('body', 'username'), 'msg': 'Field required', 'input': {'email': 'testuser', 'password': 'vb2&1XbiHDPT'}}]
+2025-09-15 10:11:23,436 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:23,438 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:23,438 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:26,292 - services - WARNING - Authentication failed - user not found: admin'; DROP TABLE users; --
+2025-09-15 10:11:26,295 - routes - WARNING - Failed login attempt for username: admin'; DROP TABLE users; --
+2025-09-15 10:11:26,295 - main - WARNING - HTTP exception for http://localhost:8000/api/v1/auth/token: 401 - Incorrect username or password
+2025-09-15 10:11:27,651 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:27,651 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:27,651 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:28,152 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:28,152 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:28,152 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:28,518 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:28,519 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:28,519 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:28,838 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:28,839 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:28,839 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:29,150 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:29,150 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:29,151 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:31,804 - services - WARNING - Authentication failed - user not found: <script>alert("XSS")</script>
+2025-09-15 10:11:31,804 - routes - WARNING - Failed login attempt for username: <script>alert("XSS")</script>
+2025-09-15 10:11:31,805 - main - WARNING - HTTP exception for http://localhost:8000/api/v1/auth/token: 401 - Incorrect username or password
+2025-09-15 10:11:32,483 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:32,484 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:32,485 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:33,094 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:33,094 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:33,094 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:33,517 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:33,517 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:33,517 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:33,862 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:33,862 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:33,862 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:36,807 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:36,808 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:36,809 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:37,261 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:37,262 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:37,262 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:37,649 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:37,649 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:37,650 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:37,962 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:37,962 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:37,962 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:40,782 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:40,782 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:40,783 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:41,259 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:41,260 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:41,260 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:44,496 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:44,497 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:44,497 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:45,059 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:45,061 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:45,062 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:45,491 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:45,491 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:45,491 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:45,828 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:45,829 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:45,829 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:46,146 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:46,146 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:46,146 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:49,692 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:49,692 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:49,692 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:50,247 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:50,248 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:50,249 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:50,622 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:50,623 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:50,623 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:52,989 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:52,990 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:52,990 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:54,764 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:54,774 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:54,775 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:55,347 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:55,347 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:55,348 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:55,835 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:55,836 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:55,837 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:56,303 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:56,304 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:56,304 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:56,623 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:56,624 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:56,624 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:56,960 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:56,961 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:56,962 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:11:57,297 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:11:57,297 - auth - INFO - Created token for user: testuser
+2025-09-15 10:11:57,297 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:00,079 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:00,080 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:00,081 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:00,818 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:00,819 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:00,819 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:01,271 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:01,271 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:01,271 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:03,058 - main - WARNING - Validation error for http://localhost:8000/api/v1/users/register: [{'type': 'missing', 'loc': ('body', 'username'), 'msg': 'Field required', 'input': {'email': 'testuser', 'password': 'he06mdn3qSPK'}}]
+2025-09-15 10:12:04,477 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:04,478 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:04,478 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:04,493 - services - WARNING - Authentication failed - user not found: nonexistent
+2025-09-15 10:12:04,493 - routes - WARNING - Failed login attempt for username: nonexistent
+2025-09-15 10:12:04,494 - main - WARNING - HTTP exception for http://localhost:8000/api/v1/auth/token: 401 - Incorrect username or password
+2025-09-15 10:12:05,814 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:05,814 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:05,814 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:05,823 - main - WARNING - Validation error for http://localhost:8000/api/v1/users/register: [{'type': 'missing', 'loc': ('body', 'username'), 'msg': 'Field required', 'input': {'email': 'testuser_1757931123597_201', 'password': 'erjZ^!qY*jhP'}}]
+2025-09-15 10:12:07,145 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:07,145 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:07,146 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:07,164 - services - WARNING - Authentication failed - user not found: <script>alert("XSS")</script>
+2025-09-15 10:12:07,166 - routes - WARNING - Failed login attempt for username: <script>alert("XSS")</script>
+2025-09-15 10:12:07,167 - main - WARNING - HTTP exception for http://localhost:8000/api/v1/auth/token: 401 - Incorrect username or password
+2025-09-15 10:12:07,934 - services - WARNING - Authentication failed - user not found: admin'; DROP TABLE users; --
+2025-09-15 10:12:07,935 - routes - WARNING - Failed login attempt for username: admin'; DROP TABLE users; --
+2025-09-15 10:12:07,935 - main - WARNING - HTTP exception for http://localhost:8000/api/v1/auth/token: 401 - Incorrect username or password
+2025-09-15 10:12:08,890 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:08,891 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:08,891 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:09,706 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:09,707 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:09,707 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:11,225 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:11,225 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:11,225 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:11,560 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:11,560 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:11,560 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:11,877 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:11,878 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:11,878 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:12,221 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:12,222 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:12,222 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:12,560 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:12,560 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:12,560 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:13,688 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:13,689 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:13,689 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:14,008 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:14,009 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:14,009 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:14,348 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:14,349 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:14,349 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:14,689 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:14,689 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:14,689 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:16,076 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:16,077 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:16,078 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:16,395 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:16,396 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:16,396 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:16,733 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:16,733 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:16,734 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:17,509 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:17,510 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:17,510 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:18,572 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:18,572 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:18,573 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:18,921 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:18,922 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:18,922 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:19,909 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:19,909 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:19,909 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:20,857 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:20,857 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:20,857 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:21,220 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:21,221 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:21,221 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:22,115 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:22,116 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:22,116 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:22,478 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:22,479 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:22,479 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:22,843 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:22,844 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:22,844 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:23,178 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:23,178 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:23,178 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:24,458 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:24,458 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:24,458 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:25,305 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:25,305 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:25,306 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:25,620 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:25,620 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:25,621 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:25,926 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:25,927 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:25,927 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:26,227 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:26,227 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:26,228 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:28,189 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:28,189 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:28,190 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:28,579 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:28,580 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:28,580 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:28,964 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:28,965 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:28,965 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:29,318 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:29,319 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:29,319 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:29,643 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:29,644 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:29,644 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:32,309 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:32,310 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:32,310 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:32,324 - services - WARNING - Authentication failed - user not found: nonexistent
+2025-09-15 10:12:32,325 - routes - WARNING - Failed login attempt for username: nonexistent
+2025-09-15 10:12:32,326 - main - WARNING - HTTP exception for http://localhost:8000/api/v1/auth/token: 401 - Incorrect username or password
+2025-09-15 10:12:32,739 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:32,740 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:32,740 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:33,092 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:33,092 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:33,092 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:35,143 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:35,144 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:35,144 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:35,158 - main - WARNING - Validation error for http://localhost:8000/api/v1/users/register: [{'type': 'missing', 'loc': ('body', 'username'), 'msg': 'Field required', 'input': {'email': 'testuser', 'password': '5ExxXdPf&q8@'}}]
+2025-09-15 10:12:37,346 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:37,349 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:37,349 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:37,361 - main - WARNING - Validation error for http://localhost:8000/api/v1/users/register: [{'type': 'missing', 'loc': ('body', 'username'), 'msg': 'Field required', 'input': {'email': 'testuser_1757931154432_302', 'password': 'vfP*INNdkx1u'}}]
+2025-09-15 10:12:37,997 - services - WARNING - Authentication failed - user not found: admin'; DROP TABLE users; --
+2025-09-15 10:12:37,997 - routes - WARNING - Failed login attempt for username: admin'; DROP TABLE users; --
+2025-09-15 10:12:37,997 - main - WARNING - HTTP exception for http://localhost:8000/api/v1/auth/token: 401 - Incorrect username or password
+2025-09-15 10:12:39,442 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:39,443 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:39,444 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:40,245 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:40,246 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:40,247 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:40,269 - services - WARNING - Authentication failed - user not found: <script>alert("XSS")</script>
+2025-09-15 10:12:40,269 - routes - WARNING - Failed login attempt for username: <script>alert("XSS")</script>
+2025-09-15 10:12:40,269 - main - WARNING - HTTP exception for http://localhost:8000/api/v1/auth/token: 401 - Incorrect username or password
+2025-09-15 10:12:41,330 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:41,332 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:41,332 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:41,840 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:41,841 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:41,842 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:42,226 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:42,227 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:42,227 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:42,571 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:42,571 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:42,572 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:42,929 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:42,929 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:42,929 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:45,398 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:45,399 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:45,399 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:45,838 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:45,839 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:45,839 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:46,147 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:46,147 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:46,147 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:47,278 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:47,279 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:47,279 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:48,670 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:48,671 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:48,672 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:49,065 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:49,065 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:49,066 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:49,385 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:49,385 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:49,385 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:49,691 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:49,691 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:49,691 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:52,272 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:52,272 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:52,273 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:52,623 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:52,623 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:52,623 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:52,925 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:52,925 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:52,925 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:55,058 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:55,059 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:55,059 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:55,447 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:55,447 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:55,448 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:55,744 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:55,745 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:55,745 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:57,756 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:57,757 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:57,757 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:58,158 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:58,159 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:58,159 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:58,454 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:58,454 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:58,454 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:58,733 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:58,733 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:58,733 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:12:59,002 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:12:59,002 - auth - INFO - Created token for user: testuser
+2025-09-15 10:12:59,002 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:00,402 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:00,403 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:00,403 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:00,887 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:00,888 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:00,888 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:01,263 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:01,264 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:01,264 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:01,625 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:01,625 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:01,626 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:02,057 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:02,058 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:02,058 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:04,544 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:04,545 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:04,545 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:04,909 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:04,909 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:04,910 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:04,911 - services - WARNING - Authentication failed - user not found: nonexistent
+2025-09-15 10:13:04,911 - routes - WARNING - Failed login attempt for username: nonexistent
+2025-09-15 10:13:04,911 - main - WARNING - HTTP exception for http://localhost:8000/api/v1/auth/token: 401 - Incorrect username or password
+2025-09-15 10:13:05,196 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:05,206 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:05,207 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:07,008 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:07,009 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:07,009 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:07,024 - main - WARNING - Validation error for http://localhost:8000/api/v1/users/register: [{'type': 'missing', 'loc': ('body', 'username'), 'msg': 'Field required', 'input': {'email': 'testuser', 'password': '@9br6gT10zn&'}}]
+2025-09-15 10:13:08,341 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:08,342 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:08,342 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:08,359 - main - WARNING - Validation error for http://localhost:8000/api/v1/users/register: [{'type': 'missing', 'loc': ('body', 'username'), 'msg': 'Field required', 'input': {'email': 'testuser_1757931186297_276', 'password': 'yt0rj7r3gEo0'}}]
+2025-09-15 10:13:09,425 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:09,426 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:09,426 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:10,007 - services - WARNING - Authentication failed - user not found: <script>alert("XSS")</script>
+2025-09-15 10:13:10,008 - routes - WARNING - Failed login attempt for username: <script>alert("XSS")</script>
+2025-09-15 10:13:10,009 - main - WARNING - HTTP exception for http://localhost:8000/api/v1/auth/token: 401 - Incorrect username or password
+2025-09-15 10:13:10,275 - services - WARNING - Authentication failed - user not found: admin'; DROP TABLE users; --
+2025-09-15 10:13:10,276 - routes - WARNING - Failed login attempt for username: admin'; DROP TABLE users; --
+2025-09-15 10:13:10,276 - main - WARNING - HTTP exception for http://localhost:8000/api/v1/auth/token: 401 - Incorrect username or password
+2025-09-15 10:13:12,202 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:12,202 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:12,202 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:12,579 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:12,580 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:12,581 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:12,913 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:12,914 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:12,914 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:13,872 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:13,873 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:13,874 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:14,794 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:14,795 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:14,795 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:15,121 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:15,122 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:15,122 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:15,461 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:15,461 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:15,462 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:16,531 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:16,531 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:16,532 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:16,886 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:16,886 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:16,886 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:17,227 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:17,228 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:17,229 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:18,507 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:18,507 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:18,507 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:18,912 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:18,912 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:18,913 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:19,238 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:19,239 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:19,239 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:19,578 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:19,578 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:19,579 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:20,745 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:20,746 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:20,746 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:21,156 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:21,156 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:21,156 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:22,718 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:22,718 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:22,718 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:23,087 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:23,087 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:23,087 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:24,849 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:24,850 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:24,850 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:25,201 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:25,201 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:25,201 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:25,539 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:25,540 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:25,540 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:25,884 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:25,885 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:25,885 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:27,626 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:27,627 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:27,627 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:27,952 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:27,953 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:27,954 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:28,279 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:28,279 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:28,279 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:28,616 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:28,618 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:28,618 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:28,939 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:28,940 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:28,940 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:30,817 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:30,817 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:30,818 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:31,167 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:31,167 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:31,167 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:31,517 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:31,517 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:31,518 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:31,856 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:31,857 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:31,857 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:32,628 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:32,629 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:32,629 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:33,170 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:33,170 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:33,171 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:33,502 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:33,503 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:33,503 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:13:35,258 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:13:35,259 - auth - INFO - Created token for user: testuser
+2025-09-15 10:13:35,259 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:16:36,148 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:16:36,148 - auth - INFO - Created token for user: testuser
+2025-09-15 10:16:36,148 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:16:36,468 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:16:36,469 - auth - INFO - Created token for user: testuser
+2025-09-15 10:16:36,470 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:16:36,801 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:16:36,801 - auth - INFO - Created token for user: testuser
+2025-09-15 10:16:36,801 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:16:37,801 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:16:37,802 - auth - INFO - Created token for user: testuser
+2025-09-15 10:16:37,802 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:16:38,573 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:16:38,574 - auth - INFO - Created token for user: testuser
+2025-09-15 10:16:38,574 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:16:40,158 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:16:40,159 - auth - INFO - Created token for user: testuser
+2025-09-15 10:16:40,159 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:17:46,323 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:17:46,324 - auth - INFO - Created token for user: testuser
+2025-09-15 10:17:46,324 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:18:19,527 - services - INFO - User authenticated successfully: testuser
+2025-09-15 10:18:19,529 - auth - INFO - Created token for user: testuser
+2025-09-15 10:18:19,529 - routes - INFO - Successful login for user: testuser
+2025-09-15 10:23:26,548 - main - INFO - Starting PARA InfoSystem API...
+2025-09-15 10:23:26,550 - database - INFO - Database schema initialized successfully
+2025-09-15 10:23:26,550 - main - INFO - Database initialized successfully
+2025-09-15 10:23:26,551 - main - INFO - Application startup completed successfully
+2025-09-15 10:33:53,249 - services - WARNING - Authentication failed - user not found: test1234
+2025-09-15 10:33:53,249 - routes - WARNING - Failed login attempt for username: test1234
+2025-09-15 10:33:53,250 - main - WARNING - HTTP exception for http://localhost:8000/api/v1/auth/token: 401 - Incorrect username or password
+2025-09-15 10:33:59,786 - services - WARNING - Authentication failed - user not found: test1234
+2025-09-15 10:33:59,786 - routes - WARNING - Failed login attempt for username: test1234
+2025-09-15 10:33:59,787 - main - WARNING - HTTP exception for http://localhost:8000/api/v1/auth/token: 401 - Incorrect username or password
+2025-09-15 10:34:10,062 - services - WARNING - Authentication failed - user not found: test123
+2025-09-15 10:34:10,062 - routes - WARNING - Failed login attempt for username: test123
+2025-09-15 10:34:10,063 - main - WARNING - HTTP exception for http://localhost:8000/api/v1/auth/token: 401 - Incorrect username or password
+2025-09-15 10:34:14,566 - services - WARNING - Authentication failed - user not found: test123
+2025-09-15 10:34:14,566 - routes - WARNING - Failed login attempt for username: test123
+2025-09-15 10:34:14,566 - main - WARNING - HTTP exception for http://localhost:8000/api/v1/auth/token: 401 - Incorrect username or password
+2025-09-15 10:34:29,424 - main - WARNING - Validation error for http://localhost:8000/api/v1/users/register: [{'type': 'missing', 'loc': ('body', 'username'), 'msg': 'Field required', 'input': {'email': 'test123456', 'password': '12345678'}}]
+2025-09-15 10:34:40,030 - main - WARNING - Validation error for http://localhost:8000/api/v1/users/register: [{'type': 'missing', 'loc': ('body', 'username'), 'msg': 'Field required', 'input': {'email': 'test1234567', 'password': '12345678'}}]
+2025-09-15 10:39:17,688 - services - INFO - Created user: test123456
+2025-09-15 10:39:17,688 - routes - INFO - New user registered: test123456
+2025-09-15 10:39:18,035 - services - INFO - User authenticated successfully: test123456
+2025-09-15 10:39:18,035 - auth - INFO - Created token for user: test123456
+2025-09-15 10:39:18,035 - routes - INFO - Successful login for user: test123456
+2025-09-15 10:39:35,501 - services - INFO - User authenticated successfully: test123456
+2025-09-15 10:39:35,502 - auth - INFO - Created token for user: test123456
+2025-09-15 10:39:35,502 - routes - INFO - Successful login for user: test123456
+2025-09-15 10:45:05,157 - services - WARNING - Authentication failed - user not found: test1234
+2025-09-15 10:45:05,158 - routes - WARNING - Failed login attempt for username: test1234
+2025-09-15 10:45:05,158 - main - WARNING - HTTP exception for http://localhost:8000/api/v1/auth/token: 401 - Incorrect username or password
+2025-09-15 10:45:14,447 - services - INFO - User authenticated successfully: test123456
+2025-09-15 10:45:14,447 - auth - INFO - Created token for user: test123456
+2025-09-15 10:45:14,448 - routes - INFO - Successful login for user: test123456
+2025-09-15 10:49:46,802 - services - INFO - User authenticated successfully: test123456
+2025-09-15 10:49:46,803 - auth - INFO - Created token for user: test123456
+2025-09-15 10:49:46,803 - routes - INFO - Successful login for user: test123456
+2025-09-15 10:51:57,761 - services - INFO - User authenticated successfully: test123456
+2025-09-15 10:51:57,762 - auth - INFO - Created token for user: test123456
+2025-09-15 10:51:57,762 - routes - INFO - Successful login for user: test123456
+2025-09-15 10:55:09,716 - services - INFO - User authenticated successfully: test123456
+2025-09-15 10:55:09,716 - auth - INFO - Created token for user: test123456
+2025-09-15 10:55:09,717 - routes - INFO - Successful login for user: test123456
+2025-09-15 10:55:28,459 - services - INFO - User authenticated successfully: test123456
+2025-09-15 10:55:28,460 - auth - INFO - Created token for user: test123456
+2025-09-15 10:55:28,460 - routes - INFO - Successful login for user: test123456
+2025-09-15 10:57:56,377 - services - INFO - User authenticated successfully: test123456
+2025-09-15 10:57:56,378 - auth - INFO - Created token for user: test123456
+2025-09-15 10:57:56,378 - routes - INFO - Successful login for user: test123456
+2025-09-15 10:58:26,219 - services - INFO - User authenticated successfully: test123456
+2025-09-15 10:58:26,220 - auth - INFO - Created token for user: test123456
+2025-09-15 10:58:26,220 - routes - INFO - Successful login for user: test123456
+2025-09-15 11:01:25,928 - main - INFO - Starting PARA InfoSystem API...
+2025-09-15 11:01:25,930 - database - INFO - Database schema initialized successfully
+2025-09-15 11:01:25,930 - main - INFO - Database initialized successfully
+2025-09-15 11:01:25,931 - main - INFO - Application startup completed successfully
+2025-09-15 11:01:35,775 - services - INFO - User authenticated successfully: test123456
+2025-09-15 11:01:35,776 - auth - INFO - Created token for user: test123456
+2025-09-15 11:01:35,776 - routes - INFO - Successful login for user: test123456
+2025-09-15 11:04:52,861 - services - INFO - User authenticated successfully: test123456
+2025-09-15 11:04:52,862 - auth - INFO - Created token for user: test123456
+2025-09-15 11:04:52,862 - routes - INFO - Successful login for user: test123456
+2025-09-15 12:52:15,902 - services - INFO - Created particle 1 for user test123456
+2025-09-15 12:52:15,903 - routes - INFO - Created particle 1 for user test123456
+2025-09-15 12:52:21,744 - services - INFO - Created particle 2 for user test123456
+2025-09-15 12:52:21,745 - routes - INFO - Created particle 2 for user test123456
+2025-09-15 12:53:04,294 - main - INFO - Shutting down PARA InfoSystem API...
+2025-09-15 12:53:04,295 - main - INFO - Shutdown completed

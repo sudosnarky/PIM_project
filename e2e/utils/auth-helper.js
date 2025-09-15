@@ -159,6 +159,13 @@ export class AuthHelper {
       
       // Try to manually trigger logout using JavaScript instead of clicking
       console.log('Attempting to call AuthManager.logout() directly...');
+      
+      // Listen for console messages
+      const messages = [];
+      this.page.on('console', msg => {
+        messages.push(msg.text());
+      });
+      
       await this.page.evaluate(() => {
         if (window.AuthManager && typeof window.AuthManager.logout === 'function') {
           console.log('AuthManager.logout found, calling it...');
@@ -170,8 +177,10 @@ export class AuthHelper {
         }
       });
       
-      // Wait for navigation to complete
-      await this.page.waitForLoadState('networkidle');
+      // Wait a moment for navigation to complete
+      await this.page.waitForTimeout(2000);
+      
+      console.log('Console messages:', messages);
       console.log('After logout, current URL:', await this.page.url());
       
       if (jsErrors.length > 0) {

@@ -8,12 +8,22 @@
  */
 class EditController {
   constructor() {
+    console.log('EditController constructor called');
     this.editing = null;
     this.particleId = this.getParticleIdFromUrl();
     
     this.initializeElements();
     this.setupEventListeners();
     this.loadParticleData();
+    
+    console.log('EditController initialized successfully');
+    console.log('Save button found:', !!this.saveBtn);
+    console.log('Form elements found:', {
+      titleInput: !!this.titleInput,
+      mdEditor: !!this.mdEditor,
+      tagsInput: !!this.tagsInput,
+      sectionSelect: !!this.sectionSelect
+    });
   }
 
   /**
@@ -23,13 +33,13 @@ class EditController {
     this.titleInput = document.querySelector('.article-header input');
     this.mdEditor = document.querySelector('.markdown-editor');
     this.tagsInput = document.querySelector('input[placeholder*="tags"]');
-    this.saveBtn = document.querySelector('.btn-primary');
+    this.saveBtn = document.getElementById('save-btn'); // More specific selector
     this.cancelBtn = document.querySelector('.btn-secondary');
     this.previewBtn = document.querySelector('.btn-preview');
     this.previewPane = document.querySelector('.preview-pane');
     
     // Add section selector if it doesn't exist
-    this.sectionSelect = document.querySelector('.section-select');
+    this.sectionSelect = document.querySelector('.category-select');
     if (!this.sectionSelect) {
       this.createSectionSelector();
     }
@@ -64,10 +74,14 @@ class EditController {
   setupEventListeners() {
     // Save button
     if (this.saveBtn) {
+      console.log('Save button found, setting up click handler');
       this.saveBtn.onclick = (e) => {
+        console.log('Save button clicked!');
         e.preventDefault();
         this.handleSave();
       };
+    } else {
+      console.error('Save button not found in DOM');
     }
 
     // Cancel button
@@ -183,11 +197,15 @@ class EditController {
    * Handle save button click
    */
   async handleSave() {
+    console.log('handleSave() called');
+    
     if (!this.validateForm()) {
+      console.log('Form validation failed');
       return;
     }
 
     const particleData = this.getFormData();
+    console.log('Form data collected:', particleData);
     
     // Disable form during save
     this.setFormEnabled(false);
@@ -453,9 +471,5 @@ class EditController {
   }
 }
 
-// Initialize edit controller when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-  if (location.pathname.endsWith('edit.html')) {
-    window.editController = new EditController();
-  }
-});
+// Expose EditController globally for app-modular.js
+window.EditController = EditController;

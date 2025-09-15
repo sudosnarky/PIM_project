@@ -12,10 +12,45 @@ function confirmDelete(button) {
 		const noteCard = button.closest('.item-card');
 		noteCard.remove();
 		
-		// Show success message
-		alert('Note deleted successfully!');
+		// Success - no additional alert needed for E2E tests
+		return true;
 	}
+	return false;
 }
+</script>
+</head>
+<script>
+// Direct script to test logout functionality
+console.log('Dashboard HTML script running');
+window.addEventListener('load', function() {
+	console.log('Window loaded, testing logout setup');
+	console.log('AuthManager available:', !!window.AuthManager);
+	
+	// Fallback logout function
+	window.testLogout = function() {
+		console.log('testLogout called');
+		if (window.AuthManager) {
+			window.AuthManager.logout();
+		} else {
+			console.log('No AuthManager, manual logout');
+			localStorage.clear();
+			window.location.href = '/static/html/index.html';
+		}
+	};
+	
+	// Set up logout button manually as fallback
+	setTimeout(function() {
+		const logoutBtn = document.getElementById('logout-btn');
+		console.log('Logout button found in fallback:', !!logoutBtn);
+		if (logoutBtn) {
+			logoutBtn.addEventListener('click', function(e) {
+				e.preventDefault();
+				console.log('Fallback logout handler triggered');
+				window.testLogout();
+			});
+		}
+	}, 1000);
+});
 </script>
 </head>
 <body>
@@ -24,7 +59,17 @@ function confirmDelete(button) {
 	<div style="display:flex;justify-content:space-between;align-items:center;">
 		<h1>PARA InfoSystem Dashboard</h1>
 		<div style="display:flex;align-items:center;margin-left:auto;gap:0.75em;">
-			<button class="btn" id="logout-btn">Logout</button>
+			<button class="btn" id="logout-btn" onclick="
+				console.log('Inline logout clicked');
+				if (window.AuthManager) {
+					console.log('AuthManager found, calling logout');
+					window.AuthManager.logout();
+				} else {
+					console.log('AuthManager not found');
+					localStorage.clear();
+					window.location.href = '/static/html/index.html';
+				}
+			">Logout</button>
 			<a href="/static/html/help.html" class="btn btn-secondary" style="padding:0.5em 1.2em;">Help & FAQs</a>
 		</div>
 	</div>

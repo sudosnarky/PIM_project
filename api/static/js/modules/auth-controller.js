@@ -11,7 +11,8 @@ class AuthController {
     console.log('AuthController constructor called');
     this.initializeElements();
     this.setupEventListeners();
-    this.checkExistingSession();
+    // Allow users to manually log in/out rather than auto-redirecting
+    // this.checkExistingSession();
   }
 
   /**
@@ -30,6 +31,7 @@ class AuthController {
     this.loginPassword = document.getElementById('login-password');
     
     // Registration form fields
+    this.registerEmail = document.getElementById('register-email');
     this.registerUsername = document.getElementById('register-username');
     this.registerPassword = document.getElementById('register-password');
   }
@@ -86,6 +88,24 @@ class AuthController {
         if (e.key === 'Enter') {
           console.log('Enter key pressed in login password field');
           this.handleLogin();
+        }
+      });
+    }
+
+    if (this.registerEmail) {
+      this.registerEmail.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          console.log('Enter key pressed in register email field');
+          this.handleRegistration();
+        }
+      });
+    }
+
+    if (this.registerUsername) {
+      this.registerUsername.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          console.log('Enter key pressed in register username field');
+          this.handleRegistration();
         }
       });
     }
@@ -255,12 +275,19 @@ class AuthController {
    * Handle registration form submission
    */
   async handleRegistration() {
-    if (!this.registerUsername || !this.registerPassword) return;
+    if (!this.registerEmail || !this.registerUsername || !this.registerPassword) return;
     
+    const email = this.registerEmail.value.trim();
     const username = this.registerUsername.value.trim();
     const password = this.registerPassword.value.trim();
 
     // Validate inputs
+    if (!email || !email.includes('@')) {
+      this.showError('register-error', 'Please enter a valid email address.');
+      this.registerEmail.focus();
+      return;
+    }
+
     if (!window.SecurityUtils.validateUsername(username)) {
       this.registerUsername.focus();
       return;
@@ -281,7 +308,7 @@ class AuthController {
     this.setRegisterFormEnabled(false);
 
     try {
-      await window.ApiService.register(username, password);
+      await window.ApiService.register(email, username, password);
       
       // Auto-login after successful registration
       await window.ApiService.login(username, password);
@@ -366,6 +393,7 @@ class AuthController {
    * @param {boolean} enabled - Whether the form should be enabled
    */
   setRegisterFormEnabled(enabled) {
+    if (this.registerEmail) this.registerEmail.disabled = !enabled;
     if (this.registerUsername) this.registerUsername.disabled = !enabled;
     if (this.registerPassword) this.registerPassword.disabled = !enabled;
     if (this.registerBtn) {
@@ -380,6 +408,7 @@ class AuthController {
   clearForms() {
     if (this.loginUsername) this.loginUsername.value = '';
     if (this.loginPassword) this.loginPassword.value = '';
+    if (this.registerEmail) this.registerEmail.value = '';
     if (this.registerUsername) this.registerUsername.value = '';
     if (this.registerPassword) this.registerPassword.value = '';
   }

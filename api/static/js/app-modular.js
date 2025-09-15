@@ -158,21 +158,60 @@ class PIMApp {
       return;
     }
     
-    // DashboardController is initialized in its own file
-    console.log('Dashboard page initialized');
+    // Initialize DashboardController
+    console.log('Dashboard page initialized, creating DashboardController...');
+    console.log('DashboardController class available:', typeof DashboardController);
+    console.log('window.DashboardController available:', typeof window.DashboardController);
+    
+    try {
+      if (!window.dashboardController) {
+        console.log('Creating new DashboardController instance...');
+        window.dashboardController = new DashboardController();
+        console.log('DashboardController created successfully:', window.dashboardController);
+      } else {
+        console.log('DashboardController already exists:', window.dashboardController);
+      }
+    } catch (error) {
+      console.error('Error creating DashboardController:', error);
+    }
   }
 
   /**
    * Initialize edit page
    */
   initEditPage() {
+    console.log('UPDATED Edit page initialized, checking authentication... (timestamp:', Date.now(), ')');
+    console.log('AuthManager available:', !!window.AuthManager);
+    
     // Ensure user is authenticated
-    if (!window.AuthManager || !window.AuthManager.requireAuth()) {
-      return;
+    if (!window.AuthManager) {
+      console.log('AuthManager not available, skipping authentication check');
+    } else {
+      console.log('AuthManager available, checking requireAuth...');
+      const authResult = window.AuthManager.requireAuth();
+      console.log('requireAuth result:', authResult);
+      if (!authResult) {
+        console.log('Authentication failed, returning early');
+        return;
+      }
     }
     
-    // EditController is initialized in its own file
-    console.log('Edit page initialized');
+    // Initialize EditController
+    console.log('Authentication passed, creating EditController...');
+    console.log('EditController class available:', typeof EditController);
+    console.log('window.EditController available:', typeof window.EditController);
+    
+    try {
+      if (!window.editController) {
+        console.log('Creating new EditController instance...');
+        window.editController = new EditController();
+        console.log('EditController created successfully:', window.editController);
+      } else {
+        console.log('EditController already exists:', window.editController);
+      }
+    } catch (error) {
+      console.error('Error creating EditController:', error);
+    }
   }
 
   /**

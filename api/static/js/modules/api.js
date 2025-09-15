@@ -112,7 +112,7 @@ class ApiService {
     }
   }
 
-  async register(email, password) {
+  async register(email, username, password) {
     const response = await fetch(`${this.baseUrl}/users/register`, {
       method: 'POST',
       headers: {
@@ -120,6 +120,7 @@ class ApiService {
       },
       body: JSON.stringify({
         email: email,
+        username: username,
         password: password,
       }),
     });

@@ -3,11 +3,14 @@
  * Manages the dashboard interface, particle listing, filtering, and user interactions.
  */
 
+console.log('Dashboard module loaded - starting execution');
+
 /**
  * Dashboard controller class for managing the main dashboard interface
  */
 class DashboardController {
   constructor() {
+    console.log('DashboardController constructor called');
     this.currentSection = 'Projects';
     this.particles = [];
     this.searchDebounceTimer = null;
@@ -15,6 +18,9 @@ class DashboardController {
     this.initializeElements();
     this.setupEventListeners();
     this.loadInitialData();
+    
+    console.log('DashboardController initialized successfully');
+    console.log('Logout button found:', !!this.logoutBtn);
   }
 
   /**
@@ -35,9 +41,18 @@ class DashboardController {
   setupEventListeners() {
     // Logout button
     if (this.logoutBtn) {
-      this.logoutBtn.onclick = () => {
-        window.AuthManager.logout();
-      };
+      console.log('Setting up logout button click handler');
+      this.logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log('Logout button clicked, calling AuthManager.logout()');
+        if (window.AuthManager) {
+          window.AuthManager.logout();
+        } else {
+          console.error('AuthManager not available');
+        }
+      });
+    } else {
+      console.error('Logout button not found in DOM');
     }
 
     // PARA tabs
@@ -381,9 +396,14 @@ class DashboardController {
   }
 }
 
-// Initialize dashboard when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-  if (location.pathname.endsWith('dashboard.html')) {
-    window.dashboardController = new DashboardController();
+// Global logout function for fallback
+window.handleLogout = function() {
+  console.log('Global handleLogout() called');
+  if (window.AuthManager) {
+    console.log('Calling AuthManager.logout()');
+    window.AuthManager.logout();
+  } else {
+    console.error('AuthManager not available for logout');
+    alert('Unable to logout - please refresh the page and try again.');
   }
-});
+};
