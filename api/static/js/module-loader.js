@@ -29,7 +29,9 @@
   function loadModule(src) {
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = src;
+      // Add cache busting parameter
+      const cacheBuster = Date.now();
+      script.src = src + '?v=' + cacheBuster;
       script.defer = true;
       
       script.onload = () => {

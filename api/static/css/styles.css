@@ -109,6 +109,17 @@ a:hover {
   color: var(--text-secondary);
 }
 
+/* Select dropdown specific styling */
+select.input-field {
+  color: #000000;
+  background: #ffffff;
+}
+
+select.input-field option {
+  color: #000000;
+  background: #ffffff;
+}
+
 textarea.input-field {
   resize: vertical;
   min-height: 200px;

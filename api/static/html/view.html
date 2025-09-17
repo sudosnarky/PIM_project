@@ -6,7 +6,7 @@
 	<link rel="icon" type="image/svg+xml" href="/static/assets/favicon.svg">
 	<title>PARA InfoSystem | View Particle</title>
 	<link rel="stylesheet" href="/static/css/styles.css">
-	<script src="/static/js/module-loader.js"></script>
+	<script src="/static/js/module-loader.js?v=fixed"></script>
 </head>
 <body>
 	<div class="container fade-in">
@@ -15,53 +15,22 @@
 				<a href="dashboard.html" class="btn">Back to Dashboard</a>
 			</div>
 
-			<div class="article-container">
-				<div class="article-header">
-					<h1 id="note-title">Sample Note Title</h1>
-					<div class="note-meta">
-						<span class="category-badge">Projects</span>
-						<span class="date-created">Created: September 15, 2025</span>
-					</div>
-				</div>
-
-				<div class="article-content markdown" id="note-content">
-					<h2>Introduction</h2>
-					<p>This is a sample note demonstrating the PARA method for organizing information. The PARA method consists of four main categories:</p>
-
-					<h3>The Four Categories</h3>
-					<ul>
-						<li><strong>Projects</strong> - Things that have a deadline and specific outcome</li>
-						<li><strong>Areas</strong> - Ongoing responsibilities to maintain over time</li>
-						<li><strong>Resources</strong> - Topics or themes of ongoing interest</li>
-						<li><strong>Archives</strong> - Items from the other three categories that are no longer active</li>
-					</ul>
-
-					<h3>Key Benefits</h3>
-					<p>The PARA method helps you:</p>
-					<ol>
-						<li>Organize information based on actionability</li>
-						<li>Reduce cognitive load by having clear categories</li>
-						<li>Find information quickly when you need it</li>
-						<li>Move seamlessly between planning and execution</li>
-					</ol>
-
-					<blockquote>
-						<p>"The goal of organizing information is not to make it look neat, but to make it useful for completing projects and moving your life forward." - Tiago Forte</p>
-					</blockquote>
-
-					<p>For more information, visit <a href="https://fortelabs.co/blog/para/" target="_blank">the official PARA method guide</a>.</p>
-				</div>
-
-				<div class="tags-container" id="note-tags">
-					<span class="tag tag-blue">productivity</span>
-					<span class="tag tag-green">organization</span>
-					<span class="tag tag-purple">para-method</span>
-					<span class="tag tag-orange">knowledge-management</span>
-					<span class="tag tag-gray">personal-development</span>
+		<div class="article-container">
+			<!-- Real content elements (initially empty, populated by JS) -->
+			<div class="article-header">
+				<h1 id="note-title"></h1>
+				<div class="note-meta">
+					<span class="category-badge" id="particle-category"></span>
+					<span class="date-created" id="particle-date"></span>
 				</div>
 			</div>
 
-			<div style="display: flex; justify-content: space-between; gap: var(--space-sm); margin-top: var(--space-lg);">
+			<div class="article-content markdown" id="note-content">
+			</div>
+
+			<div class="tags-container" id="note-tags">
+			</div>
+		</div>			<div style="display: flex; justify-content: space-between; gap: var(--space-sm); margin-top: var(--space-lg);">
 				<button class="btn btn-danger delete-btn" data-test-id="delete" onclick="confirmDelete(this)">Delete Note</button>
 				<a href="edit.html" class="btn btn-primary btn-edit">Edit Note</a>
 			</div>

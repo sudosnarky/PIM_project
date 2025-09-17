@@ -8,7 +8,9 @@
  */
 class ViewController {
   constructor() {
+    console.log('ViewController constructor called');
     this.particleId = this.getParticleIdFromUrl();
+    console.log('Particle ID from URL:', this.particleId);
     this.particle = null;
     
     this.initializeElements();
@@ -23,10 +25,12 @@ class ViewController {
     this.titleElement = document.querySelector('.article-header h1');
     this.contentElement = document.querySelector('.article-content');
     this.tagsContainer = document.querySelector('.tags-container');
-    this.editBtn = document.querySelector('.btn-edit');
-    this.deleteBtn = document.querySelector('.btn-delete');
-    this.backBtn = document.querySelector('.btn-back');
-    this.shareBtn = document.querySelector('.btn-share');
+    
+    // Reference existing buttons in HTML
+    this.editBtn = document.querySelector('a.btn-edit');  // Edit button in bottom action area
+    this.deleteBtn = document.querySelector('button.delete-btn');  // Delete button in bottom action area
+    this.backBtn = document.querySelector('a[href="dashboard.html"]');  // Back button in navigation
+    this.shareBtn = null;  // Will be created if needed
     
     // Create action buttons if they don't exist
     this.createActionButtons();
@@ -47,27 +51,7 @@ class ViewController {
       header.appendChild(actionsContainer);
     }
 
-    if (!this.editBtn) {
-      this.editBtn = document.createElement('a');
-      this.editBtn.className = 'btn btn-primary btn-edit';
-      this.editBtn.textContent = 'Edit';
-      actionsContainer.appendChild(this.editBtn);
-    }
-
-    if (!this.deleteBtn) {
-      this.deleteBtn = document.createElement('button');
-      this.deleteBtn.className = 'btn btn-danger btn-delete';
-      this.deleteBtn.textContent = 'Delete';
-      actionsContainer.appendChild(this.deleteBtn);
-    }
-
-    if (!this.backBtn) {
-      this.backBtn = document.createElement('button');
-      this.backBtn.className = 'btn btn-secondary btn-back';
-      this.backBtn.textContent = 'Back to Dashboard';
-      actionsContainer.appendChild(this.backBtn);
-    }
-
+    // Only create share button since edit/delete/back buttons exist elsewhere
     if (!this.shareBtn) {
       this.shareBtn = document.createElement('button');
       this.shareBtn.className = 'btn btn-secondary btn-share';
@@ -145,6 +129,7 @@ class ViewController {
    * Display particle content on the page
    */
   displayParticle() {
+    console.log('displayParticle called, particle:', this.particle);
     if (!this.particle) return;
 
     // Display title
@@ -474,9 +459,5 @@ class ViewController {
   }
 }
 
-// Initialize view controller when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-  if (location.pathname.endsWith('view.html')) {
-    window.viewController = new ViewController();
-  }
-});
+// Make ViewController available globally
+window.ViewController = ViewController;

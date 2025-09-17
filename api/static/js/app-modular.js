@@ -223,8 +223,13 @@ class PIMApp {
       return;
     }
     
-    // ViewController is initialized in its own file
-    console.log('View page initialized');
+    // Initialize ViewController
+    console.log('View page initialized - starting ViewController');
+    if (window.ViewController) {
+      window.viewController = new window.ViewController();
+    } else {
+      console.error('ViewController class not found');
+    }
   }
 
   /**
