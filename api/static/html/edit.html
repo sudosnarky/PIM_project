@@ -7,46 +7,84 @@
 	<title>PARA InfoSystem | Edit Particle</title>
 	<link rel="stylesheet" href="/static/css/styles.css">
 	<script src="/static/js/module-loader.js"></script>
-</head>
-<body>
-	<div class="container fade-in">
-		<div class="edit-container">
-			<div class="navigation" style="margin-bottom: var(--space-lg);">
-				<a href="dashboard.html" class="btn">Back to Dashboard</a>
-			</div>
-			<div class="article-container">
-				<div class="article-header">
-					<input type="text" id="title" name="title" class="input-field title-input" placeholder="Title" value="" required>
-				</div>
-				
-				<!-- Category Selection -->
-				<div style="margin-bottom: var(--space-md);">
-					<label for="category">PARA Category:</label>
-					<select id="category" name="category" class="input-field category-select" style="color: #000000; background-color: #ffffff;" required>
-						<option value="Projects">Projects</option>
-						<option value="Areas">Areas</option>
-						<option value="Resources">Resources</option>
-						<option value="Archives">Archives</option>
-					</select>
-				</div>
-				
-				<textarea id="content" name="content" class="input-field content-editor markdown-editor editor" rows="20" placeholder="Write your content here..." required></textarea>
-				
-				<div style="margin-top: var(--space-md);">
-					<h3>Tags</h3>
-					<div class="input-group">
-						<input type="text" id="tags" name="tags" class="input-field" placeholder="Add tags separated by commas" value="">
+	</head>
+	<body>
+		<div class="container fade-in">
+		<header role="banner">
+			<nav role="navigation" aria-label="Page navigation" style="margin-bottom: var(--space-lg);">
+				<a href="dashboard.html" class="btn" aria-describedby="back-help">Back to Dashboard</a>
+				<div id="back-help" class="visually-hidden">Return to main dashboard</div>
+			</nav>
+		</header>
+
+		<main id="main-content" role="main">
+			<div class="edit-container">
+				<!-- Status messages for screen readers -->
+				<div id="status-messages" role="status" aria-live="polite" class="visually-hidden-focusable"></div>
+
+				<form role="form" aria-labelledby="form-heading">
+					<h1 id="form-heading" class="visually-hidden">Edit Note Form</h1>
+
+					<div class="article-container">
+						<div class="article-header">
+							<label for="title" class="visually-hidden">Note Title</label>
+							<input type="text" id="title" name="title" class="input-field title-input" 
+								   placeholder="Enter note title" value="" required 
+								   aria-describedby="title-help">
+							<div id="title-help" class="visually-hidden">Enter a descriptive title for your note</div>
+						</div>
+						
+						<!-- Category Selection -->
+						<div style="margin-bottom: var(--space-md);">
+							<label for="category">PARA Category:</label>
+							<select id="category" name="category" class="input-field category-select" required
+									aria-describedby="category-help">
+								<option value="Projects">📋 Projects - Active tasks with deadlines</option>
+								<option value="Areas">🎯 Areas - Ongoing responsibilities</option>
+								<option value="Resources">📚 Resources - Reference materials</option>
+								<option value="Archives">📦 Archives - Completed items</option>
+							</select>
+							<div id="category-help" class="visually-hidden">Select which PARA category best fits this note</div>
+						</div>
+						
+						<div class="content-section">
+							<label for="content">Note Content:</label>
+							<textarea id="content" name="content" class="input-field content-editor markdown-editor editor" 
+									  rows="20" placeholder="Write your content here using Markdown formatting..." required
+									  aria-describedby="content-help"></textarea>
+							<div id="content-help" class="markdown-help">
+								Supports Markdown formatting: **bold**, *italic*, [links](url), `code`, and more
+							</div>
+						</div>
+						
+						<div style="margin-top: var(--space-md);">
+							<label for="tags">Tags:</label>
+							<div class="input-group">
+								<input type="text" id="tags" name="tags" class="input-field" 
+									   placeholder="Add tags separated by commas (e.g., work, important, project-alpha)" 
+									   value="" aria-describedby="tags-help">
+								<div id="tags-help" class="visually-hidden">Add descriptive tags to help categorize and find this note later</div>
+							</div>
+						</div>
 					</div>
-				</div>
+
+					<div style="display: flex; justify-content: flex-end; gap: var(--space-sm); margin-top: var(--space-lg);" role="group" aria-label="Form actions">
+						<button id="save-btn" class="btn btn-primary save-button" type="submit" 
+								aria-describedby="save-help">Save Changes</button>
+						<div id="save-help" class="visually-hidden">Save your note and return to dashboard</div>
+						
+						<button class="btn" type="button" onclick="window.location.href='dashboard.html'"
+								aria-describedby="cancel-help">Cancel</button>
+						<div id="cancel-help" class="visually-hidden">Discard changes and return to dashboard</div>
+					</div>
+				</form>
 			</div>
-			<div style="display: flex; justify-content: flex-end; gap: var(--space-sm); margin-top: var(--space-lg);">
-				<button id="save-btn" class="btn btn-primary save-button" type="submit">Save Changes</button>
-				<button class="btn" type="button" onclick="window.location.href='dashboard.html'">Cancel</button>
-			</div>
-		</div>
+		</main>
+
+		<footer role="contentinfo" style="text-align:center;margin-top:2em;color:#888;font-size:0.95em;">
+			&copy; <a href="https://github.com/sudosnarky" target="_blank" style="color:#888;" 
+					  aria-label="Visit sudosnarky's GitHub profile (opens in new window)">@sudosnarky</a>
+		</footer>
 	</div>
-	<footer style="text-align:center;margin-top:2em;color:#888;font-size:0.95em;">
-		&copy; <a href="https://github.com/sudosnarky" target="_blank" style="color:#888;">@sudosnarky</a>
-	</footer>
 </body>
 </html>

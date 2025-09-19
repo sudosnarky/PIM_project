@@ -283,18 +283,17 @@ class AuthController {
 
     // Validate inputs
     if (!email || !email.includes('@')) {
-      this.showError('register-error', 'Please enter a valid email address.');
-      this.registerEmail.focus();
+      this.showError('register-error', 'Please enter a valid email address.', this.registerEmail);
       return;
     }
 
     if (!window.SecurityUtils.validateUsername(username)) {
-      this.registerUsername.focus();
+      this.showError('register-error', 'Username must be 3-50 characters, letters/numbers only.', this.registerUsername);
       return;
     }
 
     if (!window.SecurityUtils.validatePassword(password)) {
-      this.registerPassword.focus();
+      this.showError('register-error', 'Password must be at least 8 characters with uppercase, lowercase, number, and special character.', this.registerPassword);
       return;
     }
 
@@ -415,13 +414,36 @@ class AuthController {
 
   /**
    * Show form validation error
+   * @param {string} errorElementId - ID of error element to show message in
    * @param {string} message - Error message to display
    * @param {HTMLElement} field - Field to focus on
    */
-  showError(message, field = null) {
-    alert(message);
+  showError(errorElementId, message, field = null) {
+    const errorDiv = document.getElementById(errorElementId);
+    if (errorDiv) {
+      errorDiv.textContent = message;
+      errorDiv.style.display = 'block';
+      // The role="alert" and aria-live="assertive" will announce this to screen readers
+    } else {
+      // Fallback to alert if error div not found
+      alert(message);
+    }
+    
     if (field) {
       field.focus();
+      // Mark field as invalid for screen readers
+      field.setAttribute('aria-invalid', 'true');
+      
+      // Remove invalid state when user starts typing
+      const removeInvalid = () => {
+        field.setAttribute('aria-invalid', 'false');
+        field.removeEventListener('input', removeInvalid);
+        // Hide error message when user starts correcting
+        if (errorDiv) {
+          errorDiv.style.display = 'none';
+        }
+      };
+      field.addEventListener('input', removeInvalid);
     }
   }
 }

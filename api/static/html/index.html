@@ -10,44 +10,88 @@
 </head>
 <body>
     <div class="page-container">
-        <div class="login-container fade-in" id="login-box">
-            <h1 style="margin-bottom:0.7em;">PARA InfoSystem</h1>
-            <div style="text-align:center;margin-bottom:1.2em;">
-                <a href="/static/html/help.html" class="btn btn-secondary" style="padding:0.5em 1.2em;">Help & FAQs</a>
+        <main id="main-content" role="main">
+            <div class="login-container fade-in" id="login-box">
+                <h1 style="margin-bottom:0.7em;">PARA InfoSystem</h1>
+                <div style="text-align:center;margin-bottom:1.2em;">
+                    <a href="/static/html/help.html" class="btn btn-secondary" style="padding:0.5em 1.2em;">Help & FAQs</a>
+                </div>
+                
+                <!-- ARIA live region for error messages -->
+                <div id="login-error" class="error" role="alert" aria-live="assertive" style="display:none;color:red;margin-bottom:1em;text-align:center;"></div>
+                
+                <form role="form" aria-labelledby="login-heading">
+                    <h2 id="login-heading" class="visually-hidden">Login Form</h2>
+                    
+                    <div class="input-group">
+                        <label for="login-username" class="visually-hidden">Username</label>
+                        <input type="text" placeholder="Username" class="input-field" id="login-username" 
+                               aria-describedby="username-help" required>
+                        <div id="username-help" class="visually-hidden">Enter your username to sign in</div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="login-password" class="visually-hidden">Password</label>
+                        <input type="password" placeholder="Password" class="input-field" id="login-password" 
+                               aria-describedby="password-help" required minlength="6">
+                        <div id="password-help" class="visually-hidden">Enter your password (minimum 6 characters)</div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" id="login-btn">Sign in</button>
+                </form>
+                
+                <div style="margin-top:16px;text-align:center;">
+                    <a href="#" id="show-register" aria-describedby="register-link-help">Don't have an account? Register</a>
+                    <div id="register-link-help" class="visually-hidden">Switch to registration form</div>
+                </div>
             </div>
-            <div id="login-error" class="error" style="display:none;color:red;margin-bottom:1em;text-align:center;"></div>
-            <div class="input-group">
-                <input type="text" placeholder="Username" class="input-field" id="login-username" required>
+            
+            <div class="login-container fade-in" id="register-box" style="display:none;">
+                <h1 style="margin-bottom:0.7em;">Register</h1>
+                <div style="text-align:center;margin-bottom:1.2em;">
+                    <a href="/static/html/help.html" class="btn btn-secondary" style="padding:0.5em 1.2em;">Help & FAQs</a>
+                </div>
+                
+                <!-- ARIA live region for error messages -->
+                <div id="register-error" class="error" role="alert" aria-live="assertive" style="display:none;color:red;margin-bottom:1em;text-align:center;"></div>
+                
+                <form role="form" aria-labelledby="register-heading">
+                    <h2 id="register-heading" class="visually-hidden">Registration Form</h2>
+                    
+                    <div class="input-group">
+                        <label for="register-email" class="visually-hidden">Email Address</label>
+                        <input type="email" placeholder="Email" class="input-field" id="register-email" 
+                               aria-describedby="email-help" required>
+                        <div id="email-help" class="visually-hidden">Enter your email address for account recovery</div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="register-username" class="visually-hidden">Username</label>
+                        <input type="text" placeholder="Username" class="input-field" id="register-username" 
+                               aria-describedby="reg-username-help" required>
+                        <div id="reg-username-help" class="visually-hidden">Choose a unique username for your account</div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="register-password" class="visually-hidden">Password</label>
+                        <input type="password" placeholder="Password" class="input-field" id="register-password" 
+                               aria-describedby="reg-password-help" required minlength="8" 
+                               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" 
+                               title="Password must be at least 8 characters with uppercase, lowercase, number, and special character">
+                        <div id="reg-password-help" class="password-requirements">
+                            Password must include: uppercase letter, lowercase letter, number, and special character (minimum 8 characters)
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" id="register-btn">Register</button>
+                </form>
+                
+                <div style="margin-top:16px;text-align:center;">
+                    <a href="#" id="show-login" aria-describedby="login-link-help">Already have an account? Login</a>
+                    <div id="login-link-help" class="visually-hidden">Switch to login form</div>
+                </div>
             </div>
-            <div class="input-group">
-                <input type="password" placeholder="Password" class="input-field" id="login-password" required minlength="6">
-            </div>
-            <button class="btn btn-primary" id="login-btn">Sign in</button>
-            <div style="margin-top:16px;text-align:center;">
-                <a href="#" id="show-register">Don't have an account? Register</a>
-            </div>
-        </div>
-        
-        <div class="login-container fade-in" id="register-box" style="display:none;">
-            <h1 style="margin-bottom:0.7em;">Register</h1>
-            <div style="text-align:center;margin-bottom:1.2em;">
-                <a href="/static/html/help.html" class="btn btn-secondary" style="padding:0.5em 1.2em;">Help & FAQs</a>
-            </div>
-            <div id="register-error" class="error" style="display:none;color:red;margin-bottom:1em;text-align:center;"></div>
-            <div class="input-group">
-                <input type="email" placeholder="Email" class="input-field" id="register-email" required>
-            </div>
-            <div class="input-group">
-                <input type="text" placeholder="Username" class="input-field" id="register-username" required>
-            </div>
-            <div class="input-group">
-                <input type="password" placeholder="Password" class="input-field" id="register-password" required minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" title="Password must be at least 8 characters with uppercase, lowercase, number, and special character">
-            </div>
-            <button class="btn btn-primary" id="register-btn">Register</button>
-            <div style="margin-top:16px;text-align:center;">
-                <a href="#" id="show-login">Already have an account? Login</a>
-            </div>
-        </div>
+        </main>
     </div>
     
     <footer style="text-align:center;margin-top:2em;color:#888;font-size:0.95em;">

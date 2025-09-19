@@ -109,17 +109,6 @@ a:hover {
   color: var(--text-secondary);
 }
 
-/* Select dropdown specific styling */
-select.input-field {
-  color: #000000;
-  background: #ffffff;
-}
-
-select.input-field option {
-  color: #000000;
-  background: #ffffff;
-}
-
 textarea.input-field {
   resize: vertical;
   min-height: 200px;
@@ -483,4 +472,274 @@ border-radius: 3px;}
   padding: 0 8px;
   margin: 0 2px;
   font-size: 0.9em;
+}
+
+/* Accessibility Styles */
+
+/* Screen reader only text */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Screen reader text that becomes visible on focus */
+.visually-hidden-focusable {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.visually-hidden-focusable:focus {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 0.5rem !important;
+  margin: 0 !important;
+  overflow: visible !important;
+  clip: auto !important;
+  white-space: normal !important;
+  background: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border: 2px solid var(--btn-primary) !important;
+  border-radius: 4px !important;
+}
+
+/* Enhanced focus indicators */
+.btn:focus,
+.input-field:focus,
+.search-input:focus,
+a:focus {
+  outline: 3px solid var(--btn-primary);
+  outline-offset: 2px;
+}
+
+/* High contrast focus for navigation tabs */
+.para-tab:focus {
+  outline: 3px solid var(--btn-primary);
+  outline-offset: 2px;
+  background-color: var(--bg-secondary);
+}
+
+/* Status message styling */
+[role="status"], 
+[role="alert"] {
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: var(--btn-radius);
+  border-left: 4px solid var(--btn-primary);
+  background: var(--bg-secondary);
+}
+
+[role="alert"] {
+  border-left-color: #dc3545;
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+/* Password requirements styling */
+.password-requirements {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+  line-height: 1.4;
+}
+
+/* PARA category icons for better visual identification */
+.para-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.para-tab[aria-selected="true"] {
+  background-color: var(--btn-primary);
+  color: white;
+}
+
+/* Improved button accessibility */
+.btn[aria-describedby] {
+  position: relative;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --bg-primary: #000000;
+    --bg-secondary: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    --border-subtle: rgba(255,255,255,0.3);
+  }
+  
+  .btn {
+    border: 2px solid currentColor;
+  }
+  
+  .input-field {
+    border: 2px solid var(--text-secondary);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .fade-in {
+    opacity: 1;
+  }
+}
+
+/* Large text support */
+@media (min-width: 1200px) {
+  .container {
+    font-size: 1.125rem;
+  }
+}
+
+/* Additional accessibility enhancements */
+
+/* Markdown help styling */
+.markdown-help {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  border-left: 3px solid var(--btn-primary);
+}
+
+/* Content section styling */
+.content-section {
+  margin-bottom: var(--space-md);
+}
+
+.content-section label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-heading);
+}
+
+/* Enhanced select styling for accessibility */
+.category-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' width='4' height='5'><path fill='%23666' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px;
+  padding-right: 40px;
+}
+
+/* Form group improvements */
+.input-group {
+  position: relative;
+  margin-bottom: var(--space-md);
+}
+
+/* Label styling improvements */
+label:not(.visually-hidden) {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-heading);
+  font-size: 0.95rem;
+}
+
+/* Error state styling */
+.input-field[aria-invalid="true"] {
+  border-color: #dc3545;
+  outline-color: #dc3545;
+}
+
+.input-field[aria-invalid="true"]:focus {
+  outline: 3px solid #dc3545;
+  outline-offset: 2px;
+}
+
+/* Success state styling */
+.input-field[aria-invalid="false"] {
+  border-color: #28a745;
+}
+
+/* Navigation improvements */
+nav[role="navigation"] {
+  margin-bottom: var(--space-lg);
+}
+
+/* Tab navigation accessibility */
+.para-nav [role="tab"] {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.para-nav [role="tab"]:hover:not([aria-selected="true"]) {
+  background-color: var(--bg-secondary);
+}
+
+.para-nav [role="tab"][aria-selected="true"] {
+  background-color: var(--btn-primary);
+  color: white;
+  font-weight: 600;
+}
+
+/* Keyboard navigation for tabs */
+.para-nav [role="tab"]:focus {
+  outline: 3px solid var(--btn-primary);
+  outline-offset: 2px;
+  z-index: 1;
+}
+
+/* List styling improvements */
+[role="list"] {
+  list-style: none;
+}
+
+[role="listitem"] {
+  margin-bottom: var(--space-md);
+}
+
+/* Group styling for actions */
+[role="group"] {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+/* Print styles for accessibility */
+@media print {
+  .skip-link,
+  .visually-hidden,
+  .visually-hidden-focusable,
+  nav[aria-label="User navigation"],
+  footer {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .btn {
+    border: 1px solid black !important;
+    background: white !important;
+    color: black !important;
+  }
 }

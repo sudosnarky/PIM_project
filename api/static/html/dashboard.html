@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PARA InfoSystem | Dashboard</title>
 <link rel="icon" type="image/svg+xml" href="/static/assets/favicon.svg">
 <link rel="stylesheet" href="/static/css/styles.css">
@@ -10,9 +12,19 @@ function confirmDelete(button) {
 	if (confirm('Are you sure you want to delete this note? This action cannot be undone.')) {
 		// Remove the note card from DOM (in a real app, this would call an API)
 		const noteCard = button.closest('.item-card');
+		const noteTitle = noteCard.querySelector('.item-title').textContent;
 		noteCard.remove();
 		
-		// Success - no additional alert needed for E2E tests
+		// Announce deletion to screen readers
+		const statusElement = document.getElementById('status-messages');
+		if (statusElement) {
+			statusElement.textContent = `Note "${noteTitle}" has been deleted successfully.`;
+			// Clear message after 3 seconds
+			setTimeout(() => {
+				statusElement.textContent = '';
+			}, 3000);
+		}
+		
 		return true;
 	}
 	return false;
@@ -55,70 +67,131 @@ window.addEventListener('load', function() {
 </head>
 <body>
 <div class="dashboard-container fade-in">
-
-	<div style="display:flex;justify-content:space-between;align-items:center;">
-		<h1>PARA InfoSystem Dashboard</h1>
-		<div style="display:flex;align-items:center;margin-left:auto;gap:0.75em;">
-			<button class="btn" id="logout-btn" onclick="
-				console.log('Inline logout clicked');
-				if (window.AuthManager) {
-					console.log('AuthManager found, calling logout');
-					window.AuthManager.logout();
-				} else {
-					console.log('AuthManager not found');
-					localStorage.clear();
-					window.location.href = '/static/html/index.html';
-				}
-			">Logout</button>
-			<a href="/static/html/help.html" class="btn btn-secondary" style="padding:0.5em 1.2em;">Help & FAQs</a>
+	<header role="banner">
+		<div style="display:flex;justify-content:space-between;align-items:center;">
+			<h1 id="main-heading">PARA InfoSystem Dashboard</h1>
+			<nav role="navigation" aria-label="User navigation">
+				<div style="display:flex;align-items:center;margin-left:auto;gap:0.75em;">
+					<button class="btn" id="logout-btn" aria-describedby="logout-help" onclick="
+						console.log('Inline logout clicked');
+						if (window.AuthManager) {
+							console.log('AuthManager found, calling logout');
+							window.AuthManager.logout();
+						} else {
+							console.log('AuthManager not found');
+							localStorage.clear();
+							window.location.href = '/static/html/index.html';
+						}
+					">Logout</button>
+					<div id="logout-help" class="visually-hidden">Sign out of your account</div>
+					<a href="/static/html/help.html" class="btn btn-secondary" style="padding:0.5em 1.2em;">Help & FAQs</a>
+				</div>
+			</nav>
 		</div>
-	</div>
+	</header>
 
-<div class="para-nav">
-<div class="para-tab active">Projects</div>
-<div class="para-tab">Areas</div>
-<div class="para-tab">Resources</div><div class="para-tab">Archives</div>
-</div>
-</div>
-<footer style="text-align:center;margin-top:2em;color:#888;font-size:0.95em;">
-	&copy; <a href="https://github.com/sudosnarky" target="_blank" style="color:#888;">@sudosnarky</a>
-</footer>
+	<main id="main-content" role="main">
+		<!-- Status messages for screen readers -->
+		<div id="status-messages" role="status" aria-live="polite" class="visually-hidden-focusable"></div>
 
-<div class="search-bar">
-<input type="text" placeholder="Search particles..." class="input-field search-input">
-<button class="btn btn-primary">Search</button>
-<button class="btn btn-secondary" id="create-particle-btn" onclick="window.location.href='edit.html';" type="button">Create Particle</button>
-</div>
+		<nav role="navigation" aria-label="PARA Method categories">
+			<div class="para-nav" role="tablist" aria-label="Note categories">
+				<div class="para-tab active" role="tab" aria-selected="true" aria-controls="projects-panel" id="projects-tab" tabindex="0">
+					<span aria-hidden="true">📋</span> Projects
+				</div>
+				<div class="para-tab" role="tab" aria-selected="false" aria-controls="areas-panel" id="areas-tab" tabindex="-1">
+					<span aria-hidden="true">🎯</span> Areas
+				</div>
+				<div class="para-tab" role="tab" aria-selected="false" aria-controls="resources-panel" id="resources-tab" tabindex="-1">
+					<span aria-hidden="true">📚</span> Resources
+				</div>
+				<div class="para-tab" role="tab" aria-selected="false" aria-controls="archives-panel" id="archives-tab" tabindex="-1">
+					<span aria-hidden="true">📦</span> Archives
+				</div>
+			</div>
+		</nav>
 
-<div class="items-list">
-<div class="item-card">
-<div class="item-info"><h3 class="item-title">Sample Project Note</h3><p class="item-snippet">This is a sample project note to demonstrate functionality...</p></div>
-<div class="item-actions">
-	<a href="view.html" class="btn btn-view">View</a>
-	<a href="edit.html" class="btn btn-edit">Edit</a>
-	<button class="btn btn-danger delete-btn" data-test-id="delete" onclick="confirmDelete(this)">Delete</button>
-</div>
-</div>
+		<section class="search-section" aria-labelledby="search-heading">
+			<h2 id="search-heading" class="visually-hidden">Search and Create Notes</h2>
+			<div class="search-bar">
+				<label for="search-input" class="visually-hidden">Search notes</label>
+				<input type="search" id="search-input" placeholder="Search particles..." class="input-field search-input" 
+				       aria-describedby="search-help">
+				<div id="search-help" class="visually-hidden">Search across all note content and titles</div>
+				
+				<button type="button" class="btn btn-primary" aria-describedby="search-btn-help">Search</button>
+				<div id="search-btn-help" class="visually-hidden">Execute search query</div>
+				
+				<button class="btn btn-secondary" id="create-particle-btn" 
+				        onclick="window.location.href='edit.html';" type="button"
+				        aria-describedby="create-btn-help">Create Particle</button>
+				<div id="create-btn-help" class="visually-hidden">Create a new note</div>
+			</div>
+		</section>
+		<section class="notes-section" aria-labelledby="notes-heading">
+			<h2 id="notes-heading" class="visually-hidden">Your Notes</h2>
+			<div class="items-list" role="list" aria-label="List of notes">
+				
+				<article class="item-card" role="listitem">
+					<div class="item-info">
+						<h3 class="item-title">Sample Project Note</h3>
+						<p class="item-snippet">This is a sample project note to demonstrate functionality...</p>
+					</div>
+					<div class="item-actions" role="group" aria-label="Actions for Sample Project Note">
+						<a href="view.html" class="btn btn-view" aria-describedby="view-help-1">View</a>
+						<div id="view-help-1" class="visually-hidden">View full content of Sample Project Note</div>
+						
+						<a href="edit.html" class="btn btn-edit" aria-describedby="edit-help-1">Edit</a>
+						<div id="edit-help-1" class="visually-hidden">Edit Sample Project Note</div>
+						
+						<button class="btn btn-danger delete-btn" data-test-id="delete" 
+						        onclick="confirmDelete(this)" aria-describedby="delete-help-1">Delete</button>
+						<div id="delete-help-1" class="visually-hidden">Delete Sample Project Note permanently</div>
+					</div>
+				</article>
 
-<div class="item-card">
-<div class="item-info"><h3 class="item-title">Area Planning</h3>
-<p class="item-snippet">Planning and organization for different life areas...</p></div>
-<div class="item-actions">
-	<a href="view.html" class="btn btn-view">View</a>
-	<a href="edit.html" class="btn btn-edit">Edit</a>
-	<button class="btn btn-danger delete-btn" data-test-id="delete" onclick="confirmDelete(this)">Delete</button>
-</div>
-</div>
+				<article class="item-card" role="listitem">
+					<div class="item-info">
+						<h3 class="item-title">Area Planning</h3>
+						<p class="item-snippet">Planning and organization for different life areas...</p>
+					</div>
+					<div class="item-actions" role="group" aria-label="Actions for Area Planning">
+						<a href="view.html" class="btn btn-view" aria-describedby="view-help-2">View</a>
+						<div id="view-help-2" class="visually-hidden">View full content of Area Planning</div>
+						
+						<a href="edit.html" class="btn btn-edit" aria-describedby="edit-help-2">Edit</a>
+						<div id="edit-help-2" class="visually-hidden">Edit Area Planning note</div>
+						
+						<button class="btn btn-danger delete-btn" data-test-id="delete" 
+						        onclick="confirmDelete(this)" aria-describedby="delete-help-2">Delete</button>
+						<div id="delete-help-2" class="visually-hidden">Delete Area Planning permanently</div>
+					</div>
+				</article>
 
-<div class="item-card">
-<div class="item-info"><h3 class="item-title">Resource Collection</h3><p class="item-snippet">Useful resources and references collected over time...</p>
-</div><div class="item-actions">
-	<a href="view.html" class="btn btn-view">View</a>
-	<a href="edit.html" class="btn btn-edit">Edit</a>
-	<button class="btn btn-danger delete-btn" data-test-id="delete" onclick="confirmDelete(this)">Delete</button>
-</div>
-</div>
-</div>
+				<article class="item-card" role="listitem">
+					<div class="item-info">
+						<h3 class="item-title">Resource Collection</h3>
+						<p class="item-snippet">Useful resources and references collected over time...</p>
+					</div>
+					<div class="item-actions" role="group" aria-label="Actions for Resource Collection">
+						<a href="view.html" class="btn btn-view" aria-describedby="view-help-3">View</a>
+						<div id="view-help-3" class="visually-hidden">View full content of Resource Collection</div>
+						
+						<a href="edit.html" class="btn btn-edit" aria-describedby="edit-help-3">Edit</a>
+						<div id="edit-help-3" class="visually-hidden">Edit Resource Collection note</div>
+						
+						<button class="btn btn-danger delete-btn" data-test-id="delete" 
+						        onclick="confirmDelete(this)" aria-describedby="delete-help-3">Delete</button>
+						<div id="delete-help-3" class="visually-hidden">Delete Resource Collection permanently</div>
+					</div>
+				</article>
+			</div>
+		</section>
+	</main>
+
+	<footer role="contentinfo" style="text-align:center;margin-top:2em;color:#888;font-size:0.95em;">
+		&copy; <a href="https://github.com/sudosnarky" target="_blank" style="color:#888;" aria-label="Visit sudosnarky's GitHub profile (opens in new window)">@sudosnarky</a>
+	</footer>
 </div>
 </body>
 </html>

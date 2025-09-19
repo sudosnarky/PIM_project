@@ -1,0 +1,20 @@
+2025-09-19 10:58:42,311 - main - INFO - Starting PARA InfoSystem API...
+2025-09-19 10:58:42,348 - database - INFO - Database schema initialized successfully
+2025-09-19 10:58:42,348 - main - INFO - Database initialized successfully
+2025-09-19 10:58:42,349 - main - INFO - Application startup completed successfully
+2025-09-19 10:59:03,601 - services - WARNING - Authentication failed - user not found: test123456
+2025-09-19 10:59:03,602 - routes - WARNING - Failed login attempt for username: test123456
+2025-09-19 10:59:03,602 - main - WARNING - HTTP exception for http://localhost:8000/api/v1/auth/token: 401 - Incorrect username or password
+2025-09-19 10:59:13,722 - services - WARNING - Authentication failed - user not found: test123456
+2025-09-19 10:59:13,723 - routes - WARNING - Failed login attempt for username: test123456
+2025-09-19 10:59:13,723 - main - WARNING - HTTP exception for http://localhost:8000/api/v1/auth/token: 401 - Incorrect username or password
+2025-09-19 10:59:23,684 - services - INFO - Created user: test123456
+2025-09-19 10:59:23,684 - routes - INFO - New user registered: test123456
+2025-09-19 10:59:24,065 - services - INFO - User authenticated successfully: test123456
+2025-09-19 10:59:24,065 - auth - INFO - Created token for user: test123456
+2025-09-19 10:59:24,066 - routes - INFO - Successful login for user: test123456
+2025-09-19 10:59:45,764 - services - INFO - User authenticated successfully: test123456
+2025-09-19 10:59:45,764 - auth - INFO - Created token for user: test123456
+2025-09-19 10:59:45,764 - routes - INFO - Successful login for user: test123456
+2025-09-19 11:05:17,341 - main - INFO - Shutting down PARA InfoSystem API...
+2025-09-19 11:05:17,341 - main - INFO - Shutdown completed
